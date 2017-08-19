@@ -20,11 +20,16 @@ window.onload = function() {
 var lastReq = {};
 
 function search(tags, page) {
+    if (event.keyCode != 13) {
+        return;
+    }
     isLoading(true);
+    var sortSelect = document.getElementById("sort");
     $.ajax(req = {
         method: "POST",
         data: {
             tags: tags,
+            sort: sortSelect.options[sortSelect.selectedIndex].value,
             page: 1,
             per_page: getPerPage()
         },

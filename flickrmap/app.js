@@ -37,6 +37,7 @@ function flickrSearch(params, callback) {
     request(getFlickrApiUrl({
         method: "flickr.photos.search",
         tags: params.tags,
+        sort: params.sort,
         page: params.page,
         per_page: params.per_page,
         has_geo: true,

@@ -12,22 +12,14 @@
     position: relative;
 }
 
-#content > #map {
+#map {
     position: relative;
     width: 100%;
     height: 100%;
 }
 
-#sidebar {
-    overflow: auto;
-    position: fixed;
-    padding: 10px;
-    width: 350px;
-    height: 100%;
-}
-
-#sidebar > #loader {
-    z-index: 2;
+#loader {
+    z-index: 3;
     visibility: hidden;
     border: 16px solid whitesmoke;
     border-radius: 50%;
@@ -47,8 +39,8 @@
     100% { transform: rotate(360deg); }
 }
 
-#sidebar > #overlay {
-    z-index: 1;
+#overlay {
+    z-index: 2;
     visibility: hidden;
     background-color: rgba(0, 0, 0, 0.50);
     position: fixed;
@@ -58,34 +50,30 @@
     right: 0px;
 }
 
-#sidebar > #searchbox {
+#sidebar {
+    position: fixed;
+    padding: 10px;
+    width: 350px;
+    height: 100%;
+    display: grid;
+    grid-auto-rows: min-content auto;
+}
+
+#form {
+    height: auto;
+}
+
+#searchbox {
     margin-bottom: 10px;
     font-size: 2em;
     width: 100%;
 }
 
-#sidebar > #btnSeeMore {
-    z-index: 0;
-    visibility: hidden;
-    font-size: 1.5em;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-#sidebar > #sideimages {
-    position: absolute;
-    top: 60px;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
+#sideimages {
     overflow: auto;
-    scroll-behavior: smooth;
-    z-index: -1;
 }
 
-#sidebar > #sideimages > #noresults {
+#noresults {
     visibility: hidden;
     font-size: 1.5em;
     font-weight: bold;
@@ -95,20 +83,30 @@
     transform: translate(-50%, -50%);
 }
 
-#sidebar > #sideimages::-webkit-scrollbar {
+#btnSeeMore {
+    z-index: 1;
+    visibility: hidden;
+    font-size: 1.5em;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#sideimages::-webkit-scrollbar {
     width: 10px;
 }
 
-#sidebar > #sideimages::-webkit-scrollbar-track {
+#sideimages::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 }
 
-#sidebar > #sideimages::-webkit-scrollbar-thumb {
+#sideimages::-webkit-scrollbar-thumb {
     background-color: darkgrey;
     outline: 1px solid slategrey;
 }
 
-#sidebar > #sideimages > img {
+#sideimages > img {
     width: 50%;
 }

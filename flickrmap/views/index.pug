@@ -4,10 +4,17 @@ block sidebar
     #sidebar
         #loader
         #overlay
-        input(id="searchbox" placeholder="Search..." onchange="search(this.value, 1)")
-        button(id="btnSeeMore" onclick="loadMore()") See More
+        #form
+            input(id="searchbox" placeholder="Search..." onkeyup="search(this.value, 1)")
+            select(id="sort")
+                option(value="relevance" selected="true") Relevance
+                option(value="interestingness-desc") Interestingness - Most
+                option(value="interestingness-asc") Interestingness - Least
+                option(value="date-posted-desc") Date Posted - Newest
+                option(value="date-posted-asc") Date Posted - Oldest
         #sideimages
             p#noresults No Results :(
+            button(id="btnSeeMore" onclick="loadMore()") See More
 
 block content
     #content
