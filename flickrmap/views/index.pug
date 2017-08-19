@@ -1,0 +1,14 @@
+extends layout
+
+block sidebar
+    #sidebar
+        #loader
+        #overlay
+        input(id="searchbox" placeholder="Search..." onchange="search(this.value, 1)")
+        button(id="btnSeeMore" onclick="loadMore()") See More
+        #sideimages
+            p#noresults No Results :(
+
+block content
+    #content
+        #map
