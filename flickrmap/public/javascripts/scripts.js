@@ -24,12 +24,11 @@ function search(tags, page) {
         return;
     }
     isLoading(true);
-    var sortSelect = document.getElementById("sort");
     $.ajax(req = {
         method: "POST",
         data: {
             tags: tags,
-            sort: sortSelect.options[sortSelect.selectedIndex].value,
+            sort: getSelectedSort(),
             page: 1,
             per_page: getPerPage()
         },
@@ -47,6 +46,7 @@ function loadMore() {
         method: lastReq.method,
         data: {
             tags: lastReq.data.tags,
+            sort: lastReq.data.sort,
             page: lastReq.data.page + 1,
             per_page: getPerPage()
         },
@@ -104,6 +104,11 @@ function processResponse(rsp, scrollToBottom) {
 function getPerPage() {
     var columns = 2;
     return columns * Math.floor(document.getElementById("sideimages").clientHeight / 158);
+}
+
+function getSelectedSort() {
+    var e = document.getElementById("sort")
+    return e.options[e.selectedIndex].value;
 }
 
 function isLoading(isLoading) {
