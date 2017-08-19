@@ -42,17 +42,21 @@ function flickrSearch(params, callback) {
         has_geo: true,
         extras: "geo, url_q"
     }), (error, response, body) => {
-        var photos = JSON.parse(body).photos.photo;
+        var apiResponse = JSON.parse(body).photos;
+        var photos = apiResponse.photo;
 
         if (photos.length == 0) {
             callback(null);
             return;
         }
 
-        var photoData = [];
+        var photoData = {
+            page: apiResponse.page,
+            photos: []
+        };
         for (i = 0; i < photos.length; i++) {
             var p = photos[i];
-            photoData.push({
+            photoData.photos.push({
                 url: p.url_q,
                 lat: p.latitude,
                 lon: p.longitude

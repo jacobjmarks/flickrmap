@@ -10,41 +10,56 @@ window.onload = function() {
         accessToken: 'pk.eyJ1IjoibmVjcm9ieXRlIiwiYSI6ImNpb2wycXRybzAwM2x1eG0xNnQ3dXVvZzcifQ.pGatEbiyoc6HmJoQHdYGwg'
     }).addTo(map);
 
-    markers = L.layerGroup().addTo(map);
+    markers = L.featureGroup().addTo(map);
+
+    // map.locate({
+    //     setView: true
+    // });
 }
 
-function getPerPage() {
-    var rows = 2;
-    return rows * Math.floor(document.getElementById("sideimages").clientHeight / 158);
-}
-
-var lastRequest = {};
+var lastReq = {};
 
 function search(tags, page) {
     isLoading(true);
-    var request = {
+    $.ajax(req = {
         method: "POST",
-        url: "/",
         data: {
             tags: tags,
             page: 1,
             per_page: getPerPage()
         },
-        success: (photos) => {
+        success: (rsp) => {
+            lastReq = req;
+            processResponse(rsp);
             isLoading(false);
-            lastRequest = request;
-            processSearch(photos);
         }
-    };
-    $.ajax(request);
+    });
 }
 
-function processSearch(photos, scrollToBottom) {
+function loadMore() {
+    isLoading(true);
+    $.ajax(req = {
+        method: lastReq.method,
+        data: {
+            tags: lastReq.data.tags,
+            page: lastReq.data.page + 1,
+            per_page: getPerPage()
+        },
+        success: (photos) => {
+            lastReq = req;
+            processResponse(photos, true);
+            isLoading(false);
+        }
+    });
+}
+
+function processResponse(rsp, scrollToBottom) {
     var imageDiv = document.getElementById("sideimages");
     var noResults = document.getElementById("noresults");
     var btnSeeMore = document.getElementById("btnSeeMore");
+    var photos = rsp.photos;
 
-    if (lastRequest.data.page == 1) {
+    if (rsp.page == 1) {
         while(imageDiv.lastChild.nodeName == "IMG") {
             imageDiv.removeChild(imageDiv.lastChild);
         }
@@ -72,28 +87,18 @@ function processSearch(photos, scrollToBottom) {
         var marker = L.marker([photos[i].lat, photos[i].lon], {icon: icon}).addTo(markers);
     }
 
+    map.fitBounds(markers.getBounds(), {
+        
+    });
+
     if (scrollToBottom) {
         $("#sideimages").animate({scrollTop: imageDiv.scrollHeight}, 1500);
     }
 }
 
-function loadMore() {
-    isLoading(true);
-    var request = {
-        method: lastRequest.method,
-        url: lastRequest.url,
-        data: {
-            tags: lastRequest.data.tags,
-            page: lastRequest.data.page + 1,
-            per_page: getPerPage()
-        },
-        success: (photos) => {
-            isLoading(false);
-            lastRequest = request;
-            processSearch(photos, true);
-        }
-    };
-    $.ajax(request);
+function getPerPage() {
+    var columns = 2;
+    return columns * Math.floor(document.getElementById("sideimages").clientHeight / 158);
 }
 
 function isLoading(isLoading) {
