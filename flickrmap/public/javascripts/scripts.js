@@ -73,7 +73,7 @@ function processSearch(photos, scrollToBottom) {
     }
 
     if (scrollToBottom) {
-        $("#sideimages").animate({scrollTop: imageDiv.scrollHeight}, 1750);
+        $("#sideimages").animate({scrollTop: imageDiv.scrollHeight}, 1500);
     }
 }
 
