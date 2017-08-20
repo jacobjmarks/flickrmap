@@ -1,21 +1,25 @@
-extends layout
-
-block sidebar
-    #sidebar
-        #loader
-        #overlay
-        #form
-            input(id="searchbox" placeholder="Search..." onkeyup="search(this.value, 1)")
-            select(id="sort")
-                option(value="relevance" selected="true") Relevance
-                option(value="interestingness-desc") Interestingness - Most
-                option(value="interestingness-asc") Interestingness - Least
-                option(value="date-posted-desc") Date Posted - Newest
-                option(value="date-posted-asc") Date Posted - Oldest
-        #sideimages
-            p#noresults No Results :(
-            button(id="btnSeeMore" onclick="loadMore()") See More
-
-block content
-    #content
+html
+    head
+        link(rel="stylesheet", href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css")
+        script(src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js")
+        script(src="https://unpkg.com/leaflet.markercluster@1.0.6/dist/leaflet.markercluster.js")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+        link(rel="stylesheet", href="/stylesheets/style.css")
+        script(src="/javascripts/scripts.js")
+    body
         #map
+        #content
+            #sidebar
+                #form
+                    input(id="searchbox" placeholder="Search..." onkeyup="search(this.value, 1)")
+                    select(id="sort")
+                        option(value="relevance" selected="true") Relevance
+                        option(value="interestingness-desc") Interestingness - Most
+                        option(value="interestingness-asc") Interestingness - Least
+                        option(value="date-posted-desc") Date Posted - Newest
+                        option(value="date-posted-asc") Date Posted - Oldest
+                #sideimages
+                p#noresults No Results :(
+                button(id="btnSeeMore" onclick="loadMore()") See More
+                #overlay
+                #loader

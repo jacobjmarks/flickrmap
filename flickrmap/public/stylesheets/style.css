@@ -5,21 +5,71 @@
     /* border: 1px dashed red; */
 }
 
-#content {
-    height: 100%;
-    width: auto;
-    margin-left: 350px;
-    position: relative;
-}
-
 #map {
-    position: relative;
+    position: fixed;
     width: 100%;
     height: 100%;
 }
 
+#content {
+    pointer-events: none;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    padding: 10px;
+}
+
+#sidebar {
+    pointer-events: all;
+    position: relative;
+    padding: 10px;
+    width: 350px;
+    height: 100%;
+    display: grid;
+    grid-auto-rows: min-content auto;
+    background-color: rgba(0, 0, 0, 0.50);
+    border-radius: 10px;    
+}
+
+#form {
+    height: auto;
+}
+
+#searchbox {
+    margin-bottom: 10px;
+    font-size: 2em;
+    width: 100%;
+}
+
+#sideimages {
+    width: 100%;
+    overflow: auto;
+}
+
+#sideimages > img {
+    width: 50%;
+}
+
+#noresults {
+    visibility: hidden;
+    font-size: 1.5em;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#btnSeeMore {
+    visibility: hidden;
+    font-size: 1.5em;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 #loader {
-    z-index: 3;
     visibility: hidden;
     border: 16px solid whitesmoke;
     border-radius: 50%;
@@ -40,7 +90,6 @@
 }
 
 #overlay {
-    z-index: 2;
     visibility: hidden;
     background-color: rgba(0, 0, 0, 0.50);
     position: fixed;
@@ -48,49 +97,6 @@
     bottom: 0px;
     left: 0px;
     right: 0px;
-}
-
-#sidebar {
-    position: fixed;
-    padding: 10px;
-    width: 350px;
-    height: 100%;
-    display: grid;
-    grid-auto-rows: min-content auto;
-}
-
-#form {
-    height: auto;
-}
-
-#searchbox {
-    margin-bottom: 10px;
-    font-size: 2em;
-    width: 100%;
-}
-
-#sideimages {
-    overflow: auto;
-}
-
-#noresults {
-    visibility: hidden;
-    font-size: 1.5em;
-    font-weight: bold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-#btnSeeMore {
-    z-index: 1;
-    visibility: hidden;
-    font-size: 1.5em;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 #sideimages::-webkit-scrollbar {
@@ -105,8 +111,4 @@
 #sideimages::-webkit-scrollbar-thumb {
     background-color: darkgrey;
     outline: 1px solid slategrey;
-}
-
-#sideimages > img {
-    width: 50%;
 }

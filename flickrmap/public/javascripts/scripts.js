@@ -65,7 +65,7 @@ function processResponse(rsp, scrollToBottom) {
     var photos = rsp.photos;
 
     if (rsp.page == 1) {
-        while(imageDiv.lastChild.nodeName == "IMG") {
+        while(imageDiv.lastChild) {
             imageDiv.removeChild(imageDiv.lastChild);
         }
         markers.clearLayers();
