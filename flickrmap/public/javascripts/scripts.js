@@ -1,5 +1,8 @@
 var map;
 var markers;
+var sideimages;
+var noresults;
+var btnSeeMore;
 
 window.onload = function() {
     map = L.map('map').setView([0, 30], 2.5);
@@ -11,6 +14,10 @@ window.onload = function() {
     }).addTo(map);
 
     markers = L.featureGroup().addTo(map);
+
+    sideimages = document.getElementById("sideimages");
+    noresults = document.getElementById("noresults");
+    btnSeeMore = document.getElementById("btnSeeMore");
 
     // map.locate({
     //     setView: true
@@ -50,54 +57,53 @@ function loadMore() {
             page: lastReq.data.page + 1,
             per_page: getPerPage()
         },
-        success: (photos) => {
+        success: (rsp) => {
             lastReq = req;
-            processResponse(photos, true);
+            processResponse(rsp, true);
             isLoading(false);
         }
     });
 }
 
 function processResponse(rsp, scrollToBottom) {
-    var imageDiv = document.getElementById("sideimages");
-    var noResults = document.getElementById("noresults");
-    var btnSeeMore = document.getElementById("btnSeeMore");
-    var photos = rsp.photos;
-
-    if (rsp.page == 1) {
-        while(imageDiv.lastChild) {
-            imageDiv.removeChild(imageDiv.lastChild);
+    function clearImages() {        
+        while(sideimages.lastChild) {
+            sideimages.removeChild(sideimages.lastChild);
         }
         markers.clearLayers();
-        btnSeeMore.style.visibility = "visible";
     }
-
-    if (!photos) {
+    
+    if (!rsp) {
+        clearImages();
         btnSeeMore.style.visibility = "hidden";
-        noResults.style.visibility = "visible";
-        return;
+        noresults.style.visibility = "visible";
     } else {
-        noResults.style.visibility = "hidden";
-    }
+        noresults.style.visibility = "hidden";
 
-    for (i = 0; i < photos.length; i++) {
-        var img = document.createElement("img");
-        img.src = photos[i].url;
-        imageDiv.appendChild(img);
+        if (rsp.page == 1) {
+            clearImages();
+            btnSeeMore.style.visibility = "visible";
+        }
 
-        var icon = L.icon({
-            iconUrl: photos[i].url,
+        for (i = 0; i < rsp.photos.length; i++) {
+            var img = document.createElement("img");
+            img.src = rsp.photos[i].url;
+            sideimages.appendChild(img);
+    
+            var icon = L.icon({
+                iconUrl: rsp.photos[i].url,
+            });
+    
+            var marker = L.marker([rsp.photos[i].lat, rsp.photos[i].lon], {icon: icon}).addTo(markers);
+        }
+    
+        map.fitBounds(markers.getBounds(), {
+            
         });
 
-        var marker = L.marker([photos[i].lat, photos[i].lon], {icon: icon}).addTo(markers);
-    }
-
-    map.fitBounds(markers.getBounds(), {
-        
-    });
-
-    if (scrollToBottom) {
-        $("#sideimages").animate({scrollTop: imageDiv.scrollHeight}, 1500);
+        if (scrollToBottom) {
+            $("#sideimages").animate({scrollTop: sideimages.scrollHeight}, 1500);
+        }
     }
 }
 
