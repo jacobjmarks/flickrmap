@@ -1,27 +1,38 @@
 html
     head
-        link(rel="icon" type="image/png" href="/images/icon.png")
-        link(rel="stylesheet", href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css")
         script(src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js")
+        link(rel="stylesheet", href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css")
+
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+        
         link(rel="stylesheet", href="/stylesheets/style.css")
         script(src="/javascripts/scripts.js")
+
+        link(rel="icon" type="image/png" href="/images/icon.png")
+        Title FlickrMap
     body
         #map
         #content
             #sidebar
                 #header
                     #title
-                        img#icon(src="/images/icon.png", alt="icon")
+                        img(id="icon" src="/images/icon.png", alt="icon")
                         h1 FlickrMap
+                    #buttons
+                        button(id="btnLogin" onclick="login()") Login
+                        button(id="btnExplore" onclick="explore()") Explore
+                        button(id="btnPanda" onclick="panda()") Panda
                 #form
                     input(id="searchbox" placeholder="Search..." onkeyup="search(this.value, 1)")
-                    select(id="sort")
-                        option(value="relevance" selected="true") Relevance
-                        option(value="interestingness-desc") Interestingness - Most
-                        option(value="interestingness-asc") Interestingness - Least
-                        option(value="date-posted-desc") Date Posted - Newest
-                        option(value="date-posted-asc") Date Posted - Oldest
+                    #options
+                        #sortby
+                            p Sort By:
+                            select(id="sort")
+                                option(value="relevance" selected="true") Relevance
+                                option(value="interestingness-desc") Interestingness - Most
+                                option(value="interestingness-asc") Interestingness - Least
+                                option(value="date-posted-desc") Date Posted - Newest
+                                option(value="date-posted-asc") Date Posted - Oldest
                 #sideimages
                 p#noresults No Results :(
                 button(id="btnSeeMore" onclick="loadMore()") See More

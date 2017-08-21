@@ -34,6 +34,7 @@
 #header {
     display: inline-block;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 #title {
@@ -54,13 +55,64 @@
     font-size: 3em;
 }
 
-#form {
+#header > #buttons {
 }
 
-#searchbox {
+#header > #buttons > button {
+    border: 1px solid grey;
+    width: 25%;
+    height: 30px;
+    font-size: 1em;
+    background-color: transparent;
+    transition-duration: 0.4s;
+}
+
+#header > #buttons > button {
+}
+
+#header > #buttons > button:hover {
+    background-color: #F0F0F0;
+}
+
+#header > #buttons > #btnLogin {
+    border-radius: 10px 0px 0px 10px;
+    border-right: none;
+}
+
+#header > #buttons > #btnExplore {
+}
+
+#header > #buttons > #btnPanda {
+    border-radius: 0px 10px 10px 0px;
+    border-left: none;
+}
+
+#form {
+    margin-bottom: 10px;
+}
+
+#form > #searchbox {
     margin-bottom: 10px;
     font-size: 2em;
     width: 100%;
+}
+
+#form > #options {
+    text-align: center;
+}
+
+#form > #options > #sortby {
+    margin: auto;
+}
+
+#form > #options p {
+    display: inline-block;
+    font-size: 1em;
+    margin-right: 10px;
+}
+
+#form > #options > #sortby > #sort {
+    font-size: 1em;
 }
 
 #sideimages {
