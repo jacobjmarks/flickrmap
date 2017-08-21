@@ -26,13 +26,35 @@
     width: 350px;
     height: 100%;
     display: grid;
-    grid-auto-rows: min-content auto;
-    background-color: rgba(0, 0, 0, 0.50);
-    border-radius: 10px;    
+    grid-auto-rows: min-content min-content auto;
+    background-color: white;
+    border-radius: 10px;
+}
+
+#header {
+    display: inline-block;
+    text-align: center;
+}
+
+#title {
+    margin: auto;
+    margin-bottom: 5px;
+    display: table;
+}
+
+#title > #icon {
+    display: table-cell;
+    vertical-align: middle;
+    height: 57px;
+}
+
+#title > h1 {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 3em;
 }
 
 #form {
-    height: auto;
 }
 
 #searchbox {

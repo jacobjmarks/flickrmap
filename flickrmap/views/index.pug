@@ -1,8 +1,8 @@
 html
     head
+        link(rel="icon" type="image/png" href="/images/icon.png")
         link(rel="stylesheet", href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css")
         script(src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js")
-        script(src="https://unpkg.com/leaflet.markercluster@1.0.6/dist/leaflet.markercluster.js")
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
         link(rel="stylesheet", href="/stylesheets/style.css")
         script(src="/javascripts/scripts.js")
@@ -10,6 +10,10 @@ html
         #map
         #content
             #sidebar
+                #header
+                    #title
+                        img#icon(src="/images/icon.png", alt="icon")
+                        h1 FlickrMap
                 #form
                     input(id="searchbox" placeholder="Search..." onkeyup="search(this.value, 1)")
                     select(id="sort")

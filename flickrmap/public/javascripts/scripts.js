@@ -5,7 +5,12 @@ var noresults;
 var btnSeeMore;
 
 window.onload = function() {
-    map = L.map('map').setView([0, 30], 2.5);
+    map = L.map('map', {
+        center: [0, 30],
+        zoom: 2.5,
+        zoomSnap: 0.1
+    });
+
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
@@ -14,6 +19,7 @@ window.onload = function() {
     }).addTo(map);
 
     markers = L.featureGroup().addTo(map);
+    map.zoomControl.setPosition('topright');
 
     sideimages = document.getElementById("sideimages");
     noresults = document.getElementById("noresults");
