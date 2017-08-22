@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const pug = require('pug');
 const path = require('path');
+const fs = require('fs');
 const router = express.Router();
 const app = express();
 
@@ -32,6 +33,11 @@ app.use(router);
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
+
+fs.writeFile(
+    "public/javascripts/pugtemplates.js",
+    pug.compileFileClient("views/popup.pug", {name: "pugrenderPopup"})
+);
 
 function flickrSearch(params, callback) {
     request(getFlickrApiUrl({

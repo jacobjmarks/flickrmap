@@ -120,7 +120,10 @@ function processResponse(rsp, scrollToBottom, callback) {
             var marker = L.marker([p.lat, p.lon], {icon: icon});
             marker.bindPopup(L.popup({
                 autoPanPaddingTopLeft: [370, 0]
-            }).setContent(p.title));
+            }).setContent(pugrenderPopup({
+                image_url: p.url,
+                title: p.title
+            })));
             marker.addTo(markers);
         }
     
