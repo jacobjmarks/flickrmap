@@ -29,8 +29,6 @@ window.onload = function() {
         overlay: document.getElementById("overlay"),
         loader: document.getElementById("loader")
     };
-
-    console.log(pugrenderPopup());
 }
 
 function search(tags, page, keyoverride) {
@@ -127,6 +125,10 @@ function processResponse(rsp, scrollToBottom, callback) {
                 title: p.title
             })));
             marker.addTo(markers);
+
+            img.onclick = () => {
+                marker.openPopup();
+            }
         }
     
         map.fitBounds(markers.getBounds(), {
