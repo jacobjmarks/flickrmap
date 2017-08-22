@@ -108,11 +108,11 @@ function processResponse(rsp, scrollToBottom, callback) {
                     }
                 }
             }
-            img.src = rsp.photos[i].url;
+            img.src = rsp.photos[i].url_q;
             sideimages.appendChild(img);
     
             var icon = L.icon({
-                iconUrl: rsp.photos[i].url,
+                iconUrl: rsp.photos[i].url_q,
                 iconSize: [50, 50]
             });
     

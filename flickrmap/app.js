@@ -41,7 +41,7 @@ function flickrSearch(params, callback) {
         page: params.page,
         per_page: params.per_page,
         has_geo: true,
-        extras: "geo, url_q"
+        extras: "geo"
     }), (error, response, body) => {
         var apiResponse = JSON.parse(body).photos;
         var photos = apiResponse.photo;
@@ -58,11 +58,12 @@ function flickrSearch(params, callback) {
         for (i = 0; i < photos.length; i++) {
             var p = photos[i];
             photoData.photos.push({
-                url: p.url_q,
+                url_q: `https://farm${p.farm}.staticflickr.com/${p.server}/${p.id}_${p.secret}_q.jpg`,
                 lat: p.latitude,
                 lon: p.longitude
             });
         }
+        console.log(`\tRESPONDING WITH ${photoData.photos.length} PHOTOS`);
         callback(photoData);
     });
 }
