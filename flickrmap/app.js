@@ -19,7 +19,7 @@ router.route('/')
         res.render('index.pug');
     })
     .post((req, res) => {
-        var params = req.body;
+        let params = req.body;
         console.log("POST /", params);
 
         flickrSearch(params, (photoData) => {
@@ -51,20 +51,20 @@ function flickrSearch(params, callback) {
         has_geo: true,
         extras: "geo"
     }), (error, response, body) => {
-        var apiResponse = JSON.parse(body).photos;
-        var photos = apiResponse.photo;
+        let apiResponse = JSON.parse(body).photos;
+        let photos = apiResponse.photo;
 
         if (photos.length == 0) {
             callback(null);
             return;
         }
 
-        var photoData = {
+        let photoData = {
             page: apiResponse.page,
             photos: []
         };
         for (i = 0; i < photos.length; i++) {
-            var p = photos[i];
+            let p = photos[i];
             photoData.photos.push({
                 title: p.title,
                 url: `https://farm${p.farm}.staticflickr.com/${p.server}/${p.id}_${p.secret}.jpg`,
@@ -78,7 +78,7 @@ function flickrSearch(params, callback) {
 }
 
 function getFlickrApiUrl(customParams) {
-    var url = "https://api.flickr.com/services/rest/?";
+    let url = "https://api.flickr.com/services/rest/?";
 
     const globalFlickrApiParams = {
         api_key: "***REMOVED***",
@@ -86,9 +86,9 @@ function getFlickrApiUrl(customParams) {
         nojsoncallback: true
     };
 
-    var addParams = function(params) {
-        for (var key in params) {
-            var val = params[key];
+    const addParams = function(params) {
+        for (let key in params) {
+            let val = params[key];
             url += `&${key}=${val}`;
         }
         return addParams;

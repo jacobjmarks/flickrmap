@@ -1,9 +1,3 @@
-var map;
-var markers;
-var sideimages;
-var noresults;
-var btnSeeMore;
-
 window.onload = function() {
     map = L.map('map', {
         center: [0, 30],
@@ -29,8 +23,6 @@ window.onload = function() {
     //     setView: true
     // });
 }
-
-var lastReq = {};
 
 function search(tags, page, keyoverride) {
     if (!keyoverride && event.keyCode != 13) {
@@ -89,8 +81,8 @@ function processResponse(rsp, scrollToBottom, callback) {
     } else {
         noresults.style.visibility = "hidden";
 
-        var numImages = rsp.photos.length;
-        var imagesLoaded = 0;
+        let numImages = rsp.photos.length;
+        let imagesLoaded = 0;
 
         if (rsp.page == 1) {
             clearImages();
@@ -98,8 +90,8 @@ function processResponse(rsp, scrollToBottom, callback) {
         }
 
         for (i = 0; i < numImages; i++) {
-            var p = rsp.photos[i];
-            var img = document.createElement("img");
+            let p = rsp.photos[i];
+            let img = document.createElement("img");
             img.onload = () => {
                 imagesLoaded++;
                 if (imagesLoaded == numImages) {
@@ -112,12 +104,12 @@ function processResponse(rsp, scrollToBottom, callback) {
             img.src = p.url_q;
             sideimages.appendChild(img);
     
-            var icon = L.icon({
+            let icon = L.icon({
                 iconUrl: p.url_q,
                 iconSize: [50, 50]
             });
     
-            var marker = L.marker([p.lat, p.lon], {icon: icon});
+            let marker = L.marker([p.lat, p.lon], {icon: icon});
             marker.bindPopup(L.popup({
                 autoPanPaddingTopLeft: [370, 0],
                 minWidth: 350
@@ -140,13 +132,13 @@ function btnSearch_OnClick() {
 }
 
 function getPerPage() {
-    var columns = 2;
-    var rows = Math.floor(document.getElementById("sideimages").clientHeight / 160);
+    const columns = 2;
+    let rows = Math.floor(document.getElementById("sideimages").clientHeight / 160);
     return columns * rows;
 }
 
 function getSelectedSort() {
-    var e = document.getElementById("sort")
+    const e = document.getElementById("sort");
     return e.options[e.selectedIndex].value;
 }
 
