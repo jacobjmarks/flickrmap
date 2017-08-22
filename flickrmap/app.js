@@ -29,6 +29,15 @@ router.route('/')
         });
     })
 
+router.post("/user/:user_id", (req, res) => {
+    console.log(`POST /user/${req.params.user_id}`);
+    getFlickrUserInfo(req.params.user_id, (userinfo) => {
+        console.log(` -> SERVING USER INFO`);
+        res.json(userinfo);
+        res.end();
+    });
+})
+
 app.use(router);
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
@@ -65,7 +74,9 @@ function flickrSearch(params, callback) {
         };
         for (i = 0; i < photos.length; i++) {
             let p = photos[i];
+            console.log(p);
             photoData.photos.push({
+                user_id: p.owner,
                 title: p.title,
                 url: `https://farm${p.farm}.staticflickr.com/${p.server}/${p.id}_${p.secret}.jpg`,
                 url_q: `https://farm${p.farm}.staticflickr.com/${p.server}/${p.id}_${p.secret}_q.jpg`,
@@ -74,6 +85,15 @@ function flickrSearch(params, callback) {
             });
         }
         callback(photoData);
+    });
+}
+
+function getFlickrUserInfo(user_id, callback) {
+    request(getFlickrApiUrl({
+        method: "flickr.people.getInfo",
+        user_id: user_id
+    }), (error, response, body) => {
+        callback(body);
     });
 }
 

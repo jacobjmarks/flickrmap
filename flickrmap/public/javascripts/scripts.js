@@ -117,20 +117,29 @@ function processResponse(rsp, scrollToBottom, callback) {
             });
     
             let marker = L.marker([p.lat, p.lon], {icon: icon});
-            marker.bindPopup(L.popup({
-                autoPanPaddingTopLeft: [370, 10],
-                autoPanPaddingBottomRight: [10, 10],
-                minWidth: 500,
-                maxWidth: 500
-            }).setContent(pugrenderPopup({
-                image_url: p.url,
-                title: p.title
-            })));
             marker.addTo(markers);
 
             img.onclick = () => {
                 marker.openPopup();
             }
+
+            L.DomEvent.addListener(marker, "click", (event) => {
+                $.ajax(`/user/${p.user_id}`, {
+                    method: "POST",
+                    success: (rsp) => {
+                        console.log(rsp);
+                        marker.bindPopup(L.popup({
+                            autoPanPaddingTopLeft: [370, 10],
+                            autoPanPaddingBottomRight: [10, 10],
+                            minWidth: 500,
+                            maxWidth: 500
+                        }).setContent(pugrenderPopup({
+                            image_url: p.url,
+                            title: p.title
+                        }))).openPopup();
+                    }
+                });
+            });
         }
     
         map.fitBounds(markers.getBounds(), {
