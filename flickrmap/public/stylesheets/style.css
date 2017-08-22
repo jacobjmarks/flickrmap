@@ -93,8 +93,28 @@
 
 #form > #searchbox {
     margin-bottom: 10px;
-    font-size: 2em;
-    width: 100%;
+    font-size: 1.5em;
+    width: 75%;
+    height: 40px;
+    border: 1px solid grey;
+    border-radius: 5px 0px 0px 5px;
+    border-right: none;
+    padding: 5px;
+}
+
+#form > #btnSearch {
+    width: 25%;
+    height: 40px;
+    font-size: 1em;
+    float: right;
+    border: 1px solid grey;
+    background-color: transparent;
+    transition-duration: 0.4s;
+    border-radius: 0px 5px 5px 0px;
+}
+
+#form > #btnSearch:hover {
+    background-color: #F0F0F0;
 }
 
 #form > #options {

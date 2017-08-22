@@ -136,9 +136,11 @@ function getSelectedSort() {
 
 function isLoading(isLoading) {
     if (isLoading) {
+        document.getElementById("searchbox").blur();
         document.getElementById("overlay").style.visibility = "visible";
         document.getElementById("loader").style.visibility = "visible";
     } else {
+        document.getElementById("searchbox").focus();
         document.getElementById("overlay").style.visibility = "hidden";
         document.getElementById("loader").style.visibility = "hidden";
     }
