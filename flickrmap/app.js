@@ -23,9 +23,9 @@ router.route('/')
         console.log("POST /", params);
 
         flickrSearch(params, (photoData) => {
+            console.log(` -> SERVING ${photoData.photos.length} PHOTOS`);
             res.json(photoData);
             res.end();
-            console.log("\tCOMPLETE");
         });
     })
 
@@ -34,10 +34,12 @@ app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
 
+console.log("Writing PUG templates...");
 fs.writeFile(
     "public/javascripts/pugtemplates.js",
-    pug.compileFileClient("views/popup.pug", {name: "pugrenderPopup"})
+    pug.compileFileClient("views/templates/popup.pug", {name: "pugrenderPopup"})
 );
+console.log(" -> DONE");
 
 function flickrSearch(params, callback) {
     request(getFlickrApiUrl({
@@ -71,7 +73,6 @@ function flickrSearch(params, callback) {
                 lon: p.longitude
             });
         }
-        console.log(`\tRESPONDING WITH ${photoData.photos.length} PHOTOS`);
         callback(photoData);
     });
 }
