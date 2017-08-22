@@ -8,7 +8,7 @@ window.onload = function() {
     map = L.map('map', {
         center: [0, 30],
         zoom: 2.5,
-        zoomSnap: 0.1
+        zoomSnap: 0.05
     });
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -113,13 +113,15 @@ function processResponse(rsp, scrollToBottom, callback) {
     
             var icon = L.icon({
                 iconUrl: rsp.photos[i].url,
+                iconSize: [50, 50]
             });
     
             var marker = L.marker([rsp.photos[i].lat, rsp.photos[i].lon], {icon: icon}).addTo(markers);
         }
     
         map.fitBounds(markers.getBounds(), {
-            
+            paddingTopLeft: [350 + 30, 30],
+            paddingBottomRight: [30, 30]
         });
     }
 }
