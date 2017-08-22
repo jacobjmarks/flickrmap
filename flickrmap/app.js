@@ -93,7 +93,17 @@ function getFlickrUserInfo(user_id, callback) {
         method: "flickr.people.getInfo",
         user_id: user_id
     }), (error, response, body) => {
-        callback(body);
+        let user = JSON.parse(body).person;
+        let userInfo = {
+            id: user.id,
+            nsid: user.nsid,
+            iconserver: user.iconserver,
+            iconfarm: user.iconfarm,
+            name: (user.realname) ? user.realname._content : user.username._content,
+            location: (user.location) ? user.location._content : null,
+            profileurl: user.profileurl._content
+        }
+        callback(userInfo);
     });
 }
 

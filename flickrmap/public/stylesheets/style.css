@@ -23,11 +23,11 @@
     padding: 0px;
 }
 
-#popupcontent > #info {
+.popupcontent > .info {
     padding: 10px;
 }
 
-#popupcontent > #image {
+.popupcontent > .image {
     width: 100%;
     margin-top: 0px;
     border-radius: 12px 12px 0px 0px;

@@ -126,8 +126,7 @@ function processResponse(rsp, scrollToBottom, callback) {
             L.DomEvent.addListener(marker, "click", (event) => {
                 $.ajax(`/user/${p.user_id}`, {
                     method: "POST",
-                    success: (rsp) => {
-                        console.log(rsp);
+                    success: (user) => {
                         marker.bindPopup(L.popup({
                             autoPanPaddingTopLeft: [370, 10],
                             autoPanPaddingBottomRight: [10, 10],
@@ -135,7 +134,13 @@ function processResponse(rsp, scrollToBottom, callback) {
                             maxWidth: 500
                         }).setContent(pugrenderPopup({
                             image_url: p.url,
-                            title: p.title
+                            title: p.title,
+                            name: user.name,
+                            buddyicon:
+                                (user.iconserver > 0) ?
+                                    `http://farm${user.iconfarm}.staticflickr.com/${user.iconserver}/buddyicons/${user.nsid}.jpg`
+                                    :
+                                    "https://www.flickr.com/images/buddyicon.gif"
                         }))).openPopup();
                     }
                 });
