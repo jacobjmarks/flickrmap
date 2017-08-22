@@ -14,14 +14,23 @@ window.onload = function() {
 
     markers = L.featureGroup().addTo(map);
     map.zoomControl.setPosition('topright');
-
-    sideimages = document.getElementById("sideimages");
-    noresults = document.getElementById("noresults");
-    btnSeeMore = document.getElementById("btnSeeMore");
-
+    
     // map.locate({
     //     setView: true
     // });
+
+    // Assign relevant DOM elements.
+    DOM = {
+        sideimages: document.getElementById("sideimages"),
+        noresults: document.getElementById("noresults"),
+        btnSeeMore: document.getElementById("btnSeeMore"),
+        searchbox: document.getElementById("searchbox"),
+        sort: document.getElementById("sort"),
+        overlay: document.getElementById("overlay"),
+        loader: document.getElementById("loader")
+    };
+
+    console.log(pugrenderPopup());
 }
 
 function search(tags, page, keyoverride) {
@@ -67,26 +76,26 @@ function loadMore() {
 
 function processResponse(rsp, scrollToBottom, callback) {
     function clearImages() {
-        while(sideimages.lastChild) {
-            sideimages.removeChild(sideimages.lastChild);
+        while(DOM.sideimages.lastChild) {
+            DOM.sideimages.removeChild(DOM.sideimages.lastChild);
         }
         markers.clearLayers();
     }
     
     if (!rsp) {
         clearImages();
-        btnSeeMore.style.visibility = "hidden";
-        noresults.style.visibility = "visible";
+        DOM.btnSeeMore.style.visibility = "hidden";
+        DOM.noresults.style.visibility = "visible";
         callback();
     } else {
-        noresults.style.visibility = "hidden";
+        DOM.noresults.style.visibility = "hidden";
 
         let numImages = rsp.photos.length;
         let imagesLoaded = 0;
 
         if (rsp.page == 1) {
             clearImages();
-            btnSeeMore.style.visibility = "visible";
+            DOM.btnSeeMore.style.visibility = "visible";
         }
 
         for (i = 0; i < numImages; i++) {
@@ -97,12 +106,12 @@ function processResponse(rsp, scrollToBottom, callback) {
                 if (imagesLoaded == numImages) {
                     callback();
                     if (scrollToBottom) {
-                        $("#sideimages").animate({scrollTop: sideimages.scrollHeight}, 1500);
+                        $("#sideimages").animate({scrollTop: DOM.sideimages.scrollHeight}, 1500);
                     }
                 }
             }
             img.src = p.url_q;
-            sideimages.appendChild(img);
+            DOM.sideimages.appendChild(img);
     
             let icon = L.icon({
                 iconUrl: p.url_q,
@@ -128,28 +137,27 @@ function processResponse(rsp, scrollToBottom, callback) {
 }
 
 function btnSearch_OnClick() {
-    search(document.getElementById("searchbox").value, 1, true);
+    search(DOM.searchbox.value, 1, true);
 }
 
 function getPerPage() {
     const columns = 2;
-    let rows = Math.floor(document.getElementById("sideimages").clientHeight / 160);
+    let rows = Math.floor(DOM.sideimages.clientHeight / 160);
     return columns * rows;
 }
 
 function getSelectedSort() {
-    const e = document.getElementById("sort");
-    return e.options[e.selectedIndex].value;
+    return DOM.sort.options[DOM.sort.selectedIndex].value;
 }
 
 function isLoading(isLoading) {
     if (isLoading) {
-        document.getElementById("searchbox").blur();
-        document.getElementById("overlay").style.visibility = "visible";
-        document.getElementById("loader").style.visibility = "visible";
+        DOM.searchbox.blur();
+        DOM.overlay.style.visibility = "visible";
+        DOM.loader.style.visibility = "visible";
     } else {
-        document.getElementById("searchbox").focus();
-        document.getElementById("overlay").style.visibility = "hidden";
-        document.getElementById("loader").style.visibility = "hidden";
+        DOM.searchbox.focus();
+        DOM.overlay.style.visibility = "hidden";
+        DOM.loader.style.visibility = "hidden";
     }
 }
