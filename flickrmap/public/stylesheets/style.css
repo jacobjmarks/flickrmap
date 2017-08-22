@@ -16,8 +16,21 @@
     border-radius: 3px;
 }
 
-.leaflet-pane.leaflet-marker-pane img:hover {
-    
+.leaflet-popup-content-wrapper,
+.leaflet-popup-content,
+.leaflet-popup-content p {
+    margin: 0px;
+    padding: 0px;
+}
+
+#popupcontent > #info {
+    padding: 10px;
+}
+
+#popupcontent > #image {
+    width: 100%;
+    margin-top: 0px;
+    border-radius: 12px 12px 0px 0px;
 }
 
 #content {
@@ -47,7 +60,7 @@
     margin-bottom: 10px;
 }
 
-#title {
+#header > #title {
     margin: auto;
     margin-bottom: 5px;
     display: table;
