@@ -32,8 +32,8 @@ window.onload = function() {
 
 var lastReq = {};
 
-function search(tags, page) {
-    if (event.keyCode != 13) {
+function search(tags, page, keyoverride) {
+    if (!keyoverride && event.keyCode != 13) {
         return;
     }
     isLoading(true);
@@ -122,6 +122,10 @@ function processResponse(rsp, scrollToBottom, callback) {
             
         });
     }
+}
+
+function btnSearch_OnClick() {
+    search(document.getElementById("searchbox").value, 1, true);
 }
 
 function getPerPage() {
