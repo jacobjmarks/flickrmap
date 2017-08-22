@@ -141,11 +141,7 @@ function processResponse(rsp, scrollToBottom, callback) {
                             image_url: p.url,
                             title: p.title,
                             name: user.name,
-                            buddyicon:
-                                (user.iconserver > 0) ?
-                                    `http://farm${user.iconfarm}.staticflickr.com/${user.iconserver}/buddyicons/${user.nsid}.jpg`
-                                    :
-                                    "https://www.flickr.com/images/buddyicon.gif"
+                            buddyicon: user.buddyicon
                         }))).openPopup();
 
                         loading = false;

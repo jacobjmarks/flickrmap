@@ -74,7 +74,6 @@ function flickrSearch(params, callback) {
         };
         for (i = 0; i < photos.length; i++) {
             let p = photos[i];
-            console.log(p);
             photoData.photos.push({
                 user_id: p.owner,
                 title: p.title,
@@ -95,13 +94,14 @@ function getFlickrUserInfo(user_id, callback) {
     }), (error, response, body) => {
         let user = JSON.parse(body).person;
         let userInfo = {
-            id: user.id,
-            nsid: user.nsid,
-            iconserver: user.iconserver,
-            iconfarm: user.iconfarm,
             name: (user.realname) ? user.realname._content : user.username._content,
             location: (user.location) ? user.location._content : null,
-            profileurl: user.profileurl._content
+            profileurl: user.profileurl._content,
+            buddyicon:
+                (user.iconserver > 0) ?
+                    `http://farm${user.iconfarm}.staticflickr.com/${user.iconserver}/buddyicons/${user.nsid}_r.jpg`
+                    :
+                    "https://www.flickr.com/images/buddyicon.gif"
         }
         callback(userInfo);
     });
