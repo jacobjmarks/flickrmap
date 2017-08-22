@@ -122,23 +122,22 @@ function processResponse(rsp, scrollToBottom, callback) {
 
             let loading = false;
             marker.on("click", (e) => {
-                if (loading === true || usersRetrieved.indexOf(p.user_id) !== -1) {
+                if (loading === true || usersRetrieved.indexOf(p.url) !== -1) {
                     return;
                 }
                 loading = true;
-                let popup = e.target.getPopup();
                 
                 $.ajax(`/user/${p.user_id}`, {
                     method: "POST",
                     success: (user) => {
-                        usersRetrieved.push(p.user_id);
+                        usersRetrieved.push(p.url);
+
                         marker.bindPopup(L.popup({
                             autoPanPaddingTopLeft: [370, 10],
                             autoPanPaddingBottomRight: [10, 10],
                             minWidth: 500,
                             maxWidth: 500
                         }).setContent(pugrenderPopup({
-                            popup: popup,
                             image_url: p.url,
                             title: p.title,
                             name: user.name,
@@ -148,6 +147,7 @@ function processResponse(rsp, scrollToBottom, callback) {
                                     :
                                     "https://www.flickr.com/images/buddyicon.gif"
                         }))).openPopup();
+
                         loading = false;
                     }
                 });
