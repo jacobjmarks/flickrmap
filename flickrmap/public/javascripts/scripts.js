@@ -47,8 +47,9 @@ function search(tags, page) {
         },
         success: (rsp) => {
             lastReq = req;
-            processResponse(rsp);
-            isLoading(false);
+            processResponse(rsp, false, () => {
+                isLoading(false);
+            });
         }
     });
 }
@@ -65,14 +66,15 @@ function loadMore() {
         },
         success: (rsp) => {
             lastReq = req;
-            processResponse(rsp, true);
-            isLoading(false);
+            processResponse(rsp, true, () => {
+                isLoading(false);
+            });
         }
     });
 }
 
-function processResponse(rsp, scrollToBottom) {
-    function clearImages() {        
+function processResponse(rsp, scrollToBottom, callback) {
+    function clearImages() {
         while(sideimages.lastChild) {
             sideimages.removeChild(sideimages.lastChild);
         }
@@ -83,16 +85,29 @@ function processResponse(rsp, scrollToBottom) {
         clearImages();
         btnSeeMore.style.visibility = "hidden";
         noresults.style.visibility = "visible";
+        callback();
     } else {
         noresults.style.visibility = "hidden";
+
+        var numImages = rsp.photos.length;
+        var imagesLoaded = 0;
 
         if (rsp.page == 1) {
             clearImages();
             btnSeeMore.style.visibility = "visible";
         }
 
-        for (i = 0; i < rsp.photos.length; i++) {
+        for (i = 0; i < numImages; i++) {
             var img = document.createElement("img");
+            img.onload = () => {
+                imagesLoaded++;
+                if (imagesLoaded == numImages) {
+                    callback();
+                    if (scrollToBottom) {
+                        $("#sideimages").animate({scrollTop: sideimages.scrollHeight}, 1500);
+                    }
+                }
+            }
             img.src = rsp.photos[i].url;
             sideimages.appendChild(img);
     
@@ -106,10 +121,6 @@ function processResponse(rsp, scrollToBottom) {
         map.fitBounds(markers.getBounds(), {
             
         });
-
-        if (scrollToBottom) {
-            $("#sideimages").animate({scrollTop: sideimages.scrollHeight}, 1500);
-        }
     }
 }
 
