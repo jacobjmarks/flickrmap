@@ -118,8 +118,10 @@ function processResponse(rsp, scrollToBottom, callback) {
     
             let marker = L.marker([p.lat, p.lon], {icon: icon});
             marker.bindPopup(L.popup({
-                autoPanPaddingTopLeft: [370, 0],
-                minWidth: 350
+                autoPanPaddingTopLeft: [370, 10],
+                autoPanPaddingBottomRight: [10, 10],
+                minWidth: 500,
+                maxWidth: 500
             }).setContent(pugrenderPopup({
                 image_url: p.url,
                 title: p.title
