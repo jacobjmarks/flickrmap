@@ -96,6 +96,8 @@ function processResponse(rsp, scrollToBottom, callback) {
             DOM.btnSeeMore.style.visibility = "visible";
         }
 
+        let usersRetrieved = [];
+
         for (i = 0; i < numImages; i++) {
             let p = rsp.photos[i];
             let img = document.createElement("img");
@@ -116,23 +118,27 @@ function processResponse(rsp, scrollToBottom, callback) {
                 iconSize: [50, 50]
             });
     
-            let marker = L.marker([p.lat, p.lon], {icon: icon});
-            marker.addTo(markers);
+            let marker = L.marker([p.lat, p.lon], {icon: icon}).addTo(markers);
 
-            img.onclick = () => {
-                marker.openPopup();
-            }
-
-            L.DomEvent.addListener(marker, "click", (event) => {
+            let loading = false;
+            marker.on("click", (e) => {
+                if (loading === true || usersRetrieved.indexOf(p.user_id) !== -1) {
+                    return;
+                }
+                loading = true;
+                let popup = e.target.getPopup();
+                
                 $.ajax(`/user/${p.user_id}`, {
                     method: "POST",
                     success: (user) => {
+                        usersRetrieved.push(p.user_id);
                         marker.bindPopup(L.popup({
                             autoPanPaddingTopLeft: [370, 10],
                             autoPanPaddingBottomRight: [10, 10],
                             minWidth: 500,
                             maxWidth: 500
                         }).setContent(pugrenderPopup({
+                            popup: popup,
                             image_url: p.url,
                             title: p.title,
                             name: user.name,
@@ -142,9 +148,14 @@ function processResponse(rsp, scrollToBottom, callback) {
                                     :
                                     "https://www.flickr.com/images/buddyicon.gif"
                         }))).openPopup();
+                        loading = false;
                     }
                 });
             });
+
+            // img.onclick = () => {
+            //     marker.openPopup();
+            // }
         }
     
         map.fitBounds(markers.getBounds(), {
