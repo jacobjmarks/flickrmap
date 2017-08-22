@@ -58,6 +58,8 @@ function flickrSearch(params, callback) {
         for (i = 0; i < photos.length; i++) {
             var p = photos[i];
             photoData.photos.push({
+                title: p.title,
+                url: `https://farm${p.farm}.staticflickr.com/${p.server}/${p.id}_${p.secret}.jpg`,
                 url_q: `https://farm${p.farm}.staticflickr.com/${p.server}/${p.id}_${p.secret}_q.jpg`,
                 lat: p.latitude,
                 lon: p.longitude

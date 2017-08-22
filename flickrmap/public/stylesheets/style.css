@@ -11,6 +11,15 @@
     height: 100%;
 }
 
+.leaflet-pane.leaflet-marker-pane img {
+    border: 2px solid white;
+    border-radius: 3px;
+}
+
+.leaflet-pane.leaflet-marker-pane img:hover {
+    
+}
+
 #content {
     pointer-events: none;
     height: 100%;

@@ -98,6 +98,7 @@ function processResponse(rsp, scrollToBottom, callback) {
         }
 
         for (i = 0; i < numImages; i++) {
+            var p = rsp.photos[i];
             var img = document.createElement("img");
             img.onload = () => {
                 imagesLoaded++;
@@ -108,15 +109,19 @@ function processResponse(rsp, scrollToBottom, callback) {
                     }
                 }
             }
-            img.src = rsp.photos[i].url_q;
+            img.src = p.url_q;
             sideimages.appendChild(img);
     
             var icon = L.icon({
-                iconUrl: rsp.photos[i].url_q,
+                iconUrl: p.url_q,
                 iconSize: [50, 50]
             });
     
-            var marker = L.marker([rsp.photos[i].lat, rsp.photos[i].lon], {icon: icon}).addTo(markers);
+            var marker = L.marker([p.lat, p.lon], {icon: icon});
+            marker.bindPopup(L.popup({
+                autoPanPaddingTopLeft: [370, 0]
+            }).setContent(p.title));
+            marker.addTo(markers);
         }
     
         map.fitBounds(markers.getBounds(), {
@@ -132,7 +137,8 @@ function btnSearch_OnClick() {
 
 function getPerPage() {
     var columns = 2;
-    return columns * Math.floor(document.getElementById("sideimages").clientHeight / 158);
+    var rows = Math.floor(document.getElementById("sideimages").clientHeight / 160);
+    return columns * rows;
 }
 
 function getSelectedSort() {
