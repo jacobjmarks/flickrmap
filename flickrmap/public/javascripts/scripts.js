@@ -158,9 +158,9 @@ function processResponse(rsp, scrollToBottom, callback) {
                 });
             });
 
-            // img.onclick = () => {
-            //     marker.openPopup();
-            // }
+            img.onclick = () => {
+                marker.fire("click");
+            }
         }
         
         // Display markers only when images have finished loading.
