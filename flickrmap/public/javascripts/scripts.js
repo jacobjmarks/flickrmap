@@ -105,9 +105,13 @@ function processResponse(rsp, scrollToBottom, callback) {
 
         for (i = 0; i < numImages; i++) {
             let p = rsp.photos[i];
+            let imgcontainer = document.createElement('div');
+            imgcontainer.className = "sideimagediv";
             let img = document.createElement("img");
+
+            img.src = p.url_q;
             img.onload = (e) => {
-                e.target.style.display = "inline-block";
+                e.target.parentElement.style.display = "inline-block";
                 imagesLoaded++;
                 if (imagesLoaded == numImages) {
                     callback();
@@ -116,8 +120,13 @@ function processResponse(rsp, scrollToBottom, callback) {
                     }
                 }
             }
-            img.src = p.url_q;
-            DOM.sideimages.appendChild(img);
+            
+            imgcontainer.onclick = () => {
+                marker.fire("click");
+            }
+
+            imgcontainer.appendChild(img);
+            DOM.sideimages.appendChild(imgcontainer);
     
             let icon = L.divIcon({
                 iconSize: [50, 50],
@@ -128,9 +137,11 @@ function processResponse(rsp, scrollToBottom, callback) {
 
             let loading = false;
             marker.on("click", (e) => {
+                console.log(imgcontainer);
                 if (loading === true || usersRetrieved.indexOf(p.url) !== -1) {
                     return;
                 }
+                loadingOverlay(imgcontainer, true);
                 loadingOverlay(e.target.getElement(), true);
                 loading = true;
                 
@@ -152,15 +163,12 @@ function processResponse(rsp, scrollToBottom, callback) {
                             buddyicon: user.buddyicon
                         }))).openPopup();
 
+                        loadingOverlay(imgcontainer, false);
                         loadingOverlay(e.target.getElement(), false);
                         loading = false;
                     }
                 });
             });
-
-            img.onclick = () => {
-                marker.fire("click");
-            }
         }
         
         // Display markers only when images have finished loading.
