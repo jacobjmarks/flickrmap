@@ -23,14 +23,43 @@
     padding: 0px;
 }
 
-.popupcontent > .info {
-    padding: 10px;
-}
-
 .popupcontent > .image {
     width: 100%;
     margin-top: 0px;
     border-radius: 12px 12px 0px 0px;
+}
+
+.popupcontent > .info {
+    display: grid;
+    grid-auto-columns: min-content auto;
+    padding: 10px;
+    font-size: 1em;
+}
+
+.popupcontent > .info > .buddyicon {
+    grid-column: 1;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    margin-right: 10px;
+    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.popupcontent > .info > .title {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 2em;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.popupcontent > .info > .name {
+    grid-row: 2;
+    font-size: 1.25em;
 }
 
 #content {
