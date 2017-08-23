@@ -94,7 +94,11 @@ function getFlickrUserInfo(user_id, callback) {
     }), (error, response, body) => {
         let user = JSON.parse(body).person;
         let userInfo = {
-            name: (user.realname) ? user.realname._content : user.username._content,
+            name:
+                (user.realname && user.realname._content) ?
+                    user.realname._content
+                    :
+                    user.username._content,
             location: (user.location) ? user.location._content : null,
             profileurl: user.profileurl._content,
             buddyicon:
