@@ -21,6 +21,7 @@ window.onload = function() {
 
     // Assign relevant DOM elements.
     DOM = {
+        sidebar: document.getElementById("sidebar"),
         sideimages: document.getElementById("sideimages"),
         noresults: document.getElementById("noresults"),
         btnSeeMore: document.getElementById("btnSeeMore"),
@@ -35,7 +36,7 @@ function search(text, page, keyoverride) {
     if (!keyoverride && event.keyCode != 13) {
         return;
     }
-    isLoading(true);
+    loadingOverlay(DOM.sidebar, true);
     $.ajax(req = {
         method: "POST",
         data: {
@@ -47,14 +48,14 @@ function search(text, page, keyoverride) {
         success: (rsp) => {
             lastReq = req;
             processResponse(rsp, false, () => {
-                isLoading(false);
+                loadingOverlay(DOM.sidebar, false);
             });
         }
     });
 }
 
 function loadMore() {
-    isLoading(true);
+    loadingOverlay(DOM.sidebar, true);
     $.ajax(req = {
         method: lastReq.method,
         data: {
@@ -66,7 +67,6 @@ function loadMore() {
         success: (rsp) => {
             lastReq = req;
             processResponse(rsp, true, () => {
-                isLoading(false);
             });
         }
     });
@@ -146,6 +146,7 @@ function processResponse(rsp, scrollToBottom, callback) {
                             buddyicon: user.buddyicon
                         }))).openPopup();
 
+                        loadingOverlay(e.target.getElement(), false);
                         loading = false;
                     }
                 });
@@ -185,14 +186,15 @@ function getSelectedSort() {
     return DOM.sort.options[DOM.sort.selectedIndex].value;
 }
 
-function isLoading(isLoading) {
-    if (isLoading) {
-        DOM.searchbox.blur();
-        DOM.overlay.style.visibility = "visible";
-        DOM.loader.style.visibility = "visible";
+function loadingOverlay(element, on) {
+    if (on) {
+        let overlay = document.createElement('div');
+        overlay.className = "overlay";
+        let loader = document.createElement('div');
+        loader.className = "loader";
+        overlay.appendChild(loader);
+        element.appendChild(overlay);
     } else {
-        DOM.searchbox.focus();
-        DOM.overlay.style.visibility = "hidden";
-        DOM.loader.style.visibility = "hidden";
+        element.removeChild(element.lastChild);
     }
 }
