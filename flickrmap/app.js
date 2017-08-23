@@ -23,7 +23,7 @@ router.route('/')
         console.log("POST /", params);
 
         flickrSearch(params, (photoData) => {
-            console.log(` -> SERVING ${photoData.photos.length} PHOTOS`);
+            console.log(` -> SERVING ${(photoData) ? photoData.photos.length : 0} PHOTOS`);
             res.json(photoData);
             res.end();
         });
@@ -53,7 +53,7 @@ console.log(" -> DONE");
 function flickrSearch(params, callback) {
     request(getFlickrApiUrl({
         method: "flickr.photos.search",
-        tags: params.tags,
+        text: params.text,
         sort: params.sort,
         page: params.page,
         per_page: params.per_page,

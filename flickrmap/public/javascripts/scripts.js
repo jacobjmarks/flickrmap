@@ -31,7 +31,7 @@ window.onload = function() {
     };
 }
 
-function search(tags, page, keyoverride) {
+function search(text, page, keyoverride) {
     if (!keyoverride && event.keyCode != 13) {
         return;
     }
@@ -39,7 +39,7 @@ function search(tags, page, keyoverride) {
     $.ajax(req = {
         method: "POST",
         data: {
-            tags: tags,
+            text: text,
             sort: getSelectedSort(),
             page: 1,
             per_page: getPerPage()
@@ -58,7 +58,7 @@ function loadMore() {
     $.ajax(req = {
         method: lastReq.method,
         data: {
-            tags: lastReq.data.tags,
+            text: lastReq.data.text,
             sort: lastReq.data.sort,
             page: lastReq.data.page + 1,
             per_page: getPerPage()
