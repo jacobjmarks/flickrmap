@@ -101,7 +101,8 @@ function processResponse(rsp, scrollToBottom, callback) {
         for (i = 0; i < numImages; i++) {
             let p = rsp.photos[i];
             let img = document.createElement("img");
-            img.onload = () => {
+            img.onload = (e) => {
+                e.target.style.display = "inline-block";
                 imagesLoaded++;
                 if (imagesLoaded == numImages) {
                     callback();
@@ -158,7 +159,9 @@ function processResponse(rsp, scrollToBottom, callback) {
         // Display markers only when images have finished loading.
         let DOMmarkers = document.getElementsByClassName("leaflet-marker-icon");
         for(i = 0; i < DOMmarkers.length; i++) {
-            DOMmarkers.item(i).setAttribute("onload", "this.style.display = 'block'");
+            DOMmarkers.item(i).onload = (e) => {
+                e.target.style.display = "block";
+            };
         }
 
         map.fitBounds(markers.getBounds(), {

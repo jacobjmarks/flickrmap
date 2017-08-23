@@ -196,6 +196,7 @@
 }
 
 #sideimages > img {
+    display: none;
     width: 50%;
 }
 
