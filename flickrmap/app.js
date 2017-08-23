@@ -70,6 +70,8 @@ function flickrSearch(params, callback) {
 
         let photoData = {
             page: apiResponse.page,
+            pages: apiResponse.pages,
+            total: apiResponse.total,
             photos: []
         };
         for (i = 0; i < photos.length; i++) {

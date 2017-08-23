@@ -97,6 +97,10 @@ function processResponse(rsp, scrollToBottom, callback) {
             DOM.btnSeeMore.style.visibility = "visible";
         }
 
+        if (rsp.page === rsp.pages) {
+            DOM.btnSeeMore.style.visibility = "hidden";
+        }
+
         let usersRetrieved = [];
 
         for (i = 0; i < numImages; i++) {
