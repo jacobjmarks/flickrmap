@@ -141,6 +141,7 @@ function processResponse(rsp, scrollToBottom, callback) {
                             image_url: p.url,
                             title: p.title,
                             name: user.name,
+                            profileurl: user.profileurl,
                             buddyicon: user.buddyicon
                         }))).openPopup();
 

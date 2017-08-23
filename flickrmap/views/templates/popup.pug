@@ -2,5 +2,6 @@
     img.image(src=image_url)
     .info
         p.title #{title}
-        img.buddyicon(src=buddyicon)
+        a.userhref(href=profileurl target="_blank")
+            img.buddyicon(src=buddyicon href=profileurl)
         p.name #{name}
