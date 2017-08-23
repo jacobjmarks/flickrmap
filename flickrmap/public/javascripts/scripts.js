@@ -154,7 +154,13 @@ function processResponse(rsp, scrollToBottom, callback) {
             //     marker.openPopup();
             // }
         }
-    
+        
+        // Display markers only when images have finished loading.
+        let DOMmarkers = document.getElementsByClassName("leaflet-marker-icon");
+        for(i = 0; i < DOMmarkers.length; i++) {
+            DOMmarkers.item(i).setAttribute("onload", "this.style.display = 'block'");
+        }
+
         map.fitBounds(markers.getBounds(), {
             paddingTopLeft: [350 + 30, 30],
             paddingBottomRight: [30, 30]

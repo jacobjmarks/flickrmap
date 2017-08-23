@@ -11,7 +11,8 @@
     height: 100%;
 }
 
-.leaflet-pane.leaflet-marker-pane img {
+.leaflet-marker-icon {
+    display: none;
     border: 2px solid white;
     border-radius: 3px;
 }
