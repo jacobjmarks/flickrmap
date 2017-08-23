@@ -12,9 +12,13 @@
 }
 
 .leaflet-marker-icon {
-    display: none;
     border: 2px solid white;
     border-radius: 3px;
+}
+
+.leaflet-marker-icon img {
+    width: 100%;
+    height: 100%;
 }
 
 .leaflet-popup-content-wrapper,
@@ -227,30 +231,21 @@
 
 .overlay {
     background-color: rgba(0, 0, 0, 0.50);
-    position: absolute;
-    width: 100%;
-    height: 100%;
     border-radius: inherit;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
 }
 
-.loader {
+.overlay .loader {
     z-index: 9999;
-    border: 16px solid whitesmoke;
-    border-radius: 50%;
-    border-top: 16px solid darkgrey;
-    width: 100px;
-    height: 100px;
-    margin: -50px 0 0 -50px;
-    animation: spin 2s linear infinite;
+    max-width: 100px;
     position: absolute;
-    bottom: 50%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
 
 #sideimages::-webkit-scrollbar {

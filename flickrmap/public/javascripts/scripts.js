@@ -67,6 +67,7 @@ function loadMore() {
         success: (rsp) => {
             lastReq = req;
             processResponse(rsp, true, () => {
+                loadingOverlay(DOM.sidebar, false);
             });
         }
     });
@@ -114,9 +115,9 @@ function processResponse(rsp, scrollToBottom, callback) {
             img.src = p.url_q;
             DOM.sideimages.appendChild(img);
     
-            let icon = L.icon({
-                iconUrl: p.url_q,
-                iconSize: [50, 50]
+            let icon = L.divIcon({
+                iconSize: [50, 50],
+                html: `<img src=${p.url_q}>`
             });
     
             let marker = L.marker([p.lat, p.lon], {icon: icon}).addTo(markers);
@@ -126,6 +127,7 @@ function processResponse(rsp, scrollToBottom, callback) {
                 if (loading === true || usersRetrieved.indexOf(p.url) !== -1) {
                     return;
                 }
+                loadingOverlay(e.target.getElement(), true);
                 loading = true;
                 
                 $.ajax(`/user/${p.user_id}`, {
@@ -190,9 +192,10 @@ function loadingOverlay(element, on) {
     if (on) {
         let overlay = document.createElement('div');
         overlay.className = "overlay";
-        let loader = document.createElement('div');
-        loader.className = "loader";
-        overlay.appendChild(loader);
+        let img = document.createElement('img');
+        img.className = "loader";
+        img.src = "/images/loading.gif";
+        overlay.appendChild(img);
         element.appendChild(overlay);
     } else {
         element.removeChild(element.lastChild);
