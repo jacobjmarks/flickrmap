@@ -137,7 +137,6 @@ function processResponse(rsp, scrollToBottom, callback) {
 
             let loading = false;
             marker.on("click", (e) => {
-                console.log(imgcontainer);
                 if (loading === true || usersRetrieved.indexOf(p.url) !== -1) {
                     return;
                 }
