@@ -102,7 +102,13 @@ function getFlickrPhotoInfo(photo_id, callback) {
             description: info.description._content,
             views: info.views,
             comments: info.comments._content,
-            tags: info.tags.tag,
+            tags: ((tagArray)=> {
+                let tags = []
+                for(i = 0; i < tagArray.length; i++) {
+                    tags.push(tagArray[i].raw);
+                }
+                return tags;
+            })(info.tags.tag),
             owner: {
                 name: (owner.realname) ? owner.realname : owner.username,
                 location: owner.location,
