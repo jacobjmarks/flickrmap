@@ -23,9 +23,9 @@ router.get("/", (req, res) => {
 router.post("/imagesearch", (req, res) => {
     let params = req.body;
     console.log("POST /", params);
-    flickr.search(params, (photoData) => {
-        console.log(` -> SERVING ${(photoData) ? photoData.photos.length : 0} PHOTOS`);
-        res.json(photoData);
+    flickr.search(params, (results) => {
+        console.log(` -> SERVING ${results.photos.length} PHOTOS`);
+        res.json(results);
         res.end();
     });
 });

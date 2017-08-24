@@ -12,33 +12,26 @@ exports.search = function(params, callback) {
         has_geo: true,
         extras: "geo"
     }), (error, response, body) => {
-        let apiResponse = JSON.parse(body).photos;
-        let photos = apiResponse.photo;
+        let results = JSON.parse(body).photos;
+        let photos = results.photo;
 
-        if (photos.length == 0) {
-            callback(null);
-            return;
-        }
-
-        let photoData = {
-            page: apiResponse.page,
-            pages: apiResponse.pages,
-            total: apiResponse.total,
+        let clientData = {
+            page: results.page,
+            pages: results.pages,
+            total: results.total,
             photos: []
         };
         for (i = 0; i < photos.length; i++) {
-            let p = photos[i];
-            photoData.photos.push({
-                photo_id: p.id,
-                user_id: p.owner,
-                title: p.title,
-                url: `https://farm${p.farm}.staticflickr.com/${p.server}/${p.id}_${p.secret}.jpg`,
-                url_q: `https://farm${p.farm}.staticflickr.com/${p.server}/${p.id}_${p.secret}_q.jpg`,
-                lat: p.latitude,
-                lon: p.longitude
+            let photo = photos[i];
+            clientData.photos.push({
+                photo_id: photo.id,
+                url: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`,
+                url_q: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_q.jpg`,
+                lat: photo.latitude,
+                lon: photo.longitude
             });
         }
-        callback(photoData);
+        callback(clientData);
     });
 }
 
@@ -90,21 +83,18 @@ exports.getPhotoInfo = function(photo_id, callback) {
 function formApiUrl(customParams) {
     let url = "https://api.flickr.com/services/rest/?";
 
-    const globalFlickrApiParams = {
+    const globalParams = {
         api_key: "***REMOVED***",
         format: "json",
         nojsoncallback: true
     };
 
-    const addParams = function(params) {
-        for (let key in params) {
-            let val = params[key];
-            url += `&${key}=${val}`;
-        }
-        return addParams;
-    }
+    let params = Object.assign({}, customParams, globalParams);
 
-    addParams(customParams)(globalFlickrApiParams);
+    for (let key in params) {
+        let val = params[key];
+        url += `&${key}=${val}`;
+    }
 
     return url;
 }

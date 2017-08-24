@@ -42,13 +42,13 @@ function search(text, page, keyoverride) {
         method: "POST",
         data: {
             text: text,
-            sort: getSelectedSort(),
+            sort: DOM.sort.options[DOM.sort.selectedIndex].value,
             page: 1,
             per_page: getPerPage()
         },
         success: (rsp) => {
             lastReq = req.data;
-            processResponse(rsp, false, () => {
+            processResults(rsp, false, () => {
                 loadingOverlay(DOM.sidebar, false);
             });
         }
@@ -68,14 +68,14 @@ function loadMore() {
         },
         success: (rsp) => {
             lastReq = req.data;
-            processResponse(rsp, true, () => {
+            processResults(rsp, true, () => {
                 loadingOverlay(DOM.sidebar, false);
             });
         }
     });
 }
 
-function processResponse(rsp, scrollToBottom, callback) {
+function processResults(results, scrollToBottom, callback) {
     function clearImages() {
         while(DOM.sideimages.lastChild) {
             DOM.sideimages.removeChild(DOM.sideimages.lastChild);
@@ -83,113 +83,114 @@ function processResponse(rsp, scrollToBottom, callback) {
         markers.clearLayers();
     }
     
-    if (!rsp) {
+    let numImages = results.photos.length;
+
+    if (numImages === 0) {
         clearImages();
         DOM.btnSeeMore.style.visibility = "hidden";
         DOM.noresults.style.visibility = "visible";
         callback();
-    } else {
-        DOM.noresults.style.visibility = "hidden";
+        return;
+    }
 
-        let numImages = rsp.photos.length;
-        let imagesLoaded = 0;
+    if (results.page == 1) {
+        clearImages();
+        DOM.btnSeeMore.style.visibility = "visible";
+    }
 
-        if (rsp.page == 1) {
-            clearImages();
-            DOM.btnSeeMore.style.visibility = "visible";
-        }
+    if (results.page === results.pages) {
+        DOM.btnSeeMore.style.visibility = "hidden";
+    }
+    
+    DOM.noresults.style.visibility = "hidden";
 
-        if (rsp.page === rsp.pages) {
-            DOM.btnSeeMore.style.visibility = "hidden";
-        }
+    let imagesLoaded = 0;
+    let photoInfoRetrieved = [];
 
-        let photoInfoRetrieved = [];
+    for (i = 0; i < numImages; i++) {
+        let photo = results.photos[i];
+        let imgcontainer = document.createElement('div');
+        imgcontainer.className = "sideimagediv";
+        let img = document.createElement("img");
 
-        for (i = 0; i < numImages; i++) {
-            let p = rsp.photos[i];
-            let imgcontainer = document.createElement('div');
-            imgcontainer.className = "sideimagediv";
-            let img = document.createElement("img");
-
-            img.src = p.url_q;
-            img.onload = (e) => {
-                e.target.parentElement.style.display = "inline-block";
-                imagesLoaded++;
-                if (imagesLoaded == numImages) {
-                    callback();
-                    if (scrollToBottom) {
-                        $("#sideimages").animate({scrollTop: DOM.sideimages.scrollHeight}, 1500);
-                    }
+        img.src = photo.url_q;
+        img.onload = (e) => {
+            e.target.parentElement.style.display = "inline-block";
+            imagesLoaded++;
+            if (imagesLoaded == numImages) {
+                callback();
+                if (scrollToBottom) {
+                    $("#sideimages").animate({scrollTop: DOM.sideimages.scrollHeight}, 1500);
                 }
             }
-            
-            imgcontainer.onclick = () => {
-                marker.fire("click");
-            }
-
-            imgcontainer.appendChild(img);
-            DOM.sideimages.appendChild(imgcontainer);
-    
-            let icon = L.divIcon({
-                iconSize: [50, 50],
-                html: `<img src=${p.url_q}>`
-            });
-    
-            let marker = L.marker([p.lat, p.lon], {icon: icon}).addTo(markers);
-
-            var loading = false;
-            marker.on("click", (e) => {
-                if (loading === true || photoInfoRetrieved.indexOf(p.photo_id) !== -1) {
-                    return;
-                }
-                loadingOverlay(imgcontainer, true);
-                loadingOverlay(e.target.getElement(), true);
-                loading = true;
-                
-                $.ajax(`/photo/${p.photo_id}`, {
-                    method: "POST",
-                    success: (photoInfo) => {
-                        photoInfoRetrieved.push(p.photo_id);
-
-                        let popup = L.popup({
-                            autoPanPaddingTopLeft: [370, 10],
-                            autoPanPaddingBottomRight: [10, 10],
-                            minWidth: 500,
-                            maxWidth: 500
-                        });
-
-                        popup.setContent(pugrenderPopup({
-                            image_url: p.url,
-                            title: photoInfo.title,
-                            description: photoInfo.description,
-                            ownername: photoInfo.owner.name,
-                            profileurl: photoInfo.owner.profileurl,
-                            buddyicon: photoInfo.owner.buddyicon
-                        }));
-
-                        marker.bindPopup(popup).openPopup();
-
-                        loadingOverlay(imgcontainer, false);
-                        loadingOverlay(e.target.getElement(), false);
-                        loading = false;
-                    }
-                });
-            });
         }
         
-        // Display markers only when images have finished loading.
-        let DOMmarkers = document.getElementsByClassName("leaflet-marker-icon");
-        for(i = 0; i < DOMmarkers.length; i++) {
-            DOMmarkers.item(i).firstChild.onload = (e) => {
-                e.target.parentElement.style.display = "block";
-            };
+        imgcontainer.onclick = () => {
+            marker.fire("click");
         }
 
-        map.fitBounds(markers.getBounds(), {
-            paddingTopLeft: [350 + 30, 30],
-            paddingBottomRight: [30, 30]
+        imgcontainer.appendChild(img);
+        DOM.sideimages.appendChild(imgcontainer);
+
+        let icon = L.divIcon({
+            iconSize: [50, 50],
+            html: `<img src=${photo.url_q}>`
+        });
+
+        let marker = L.marker([photo.lat, photo.lon], {icon: icon}).addTo(markers);
+
+        var loading = false;
+        marker.on("click", (e) => {
+            if (loading === true || photoInfoRetrieved.indexOf(photo.photo_id) !== -1) {
+                return;
+            }
+            loadingOverlay(imgcontainer, true);
+            loadingOverlay(e.target.getElement(), true);
+            loading = true;
+            
+            $.ajax(`/photo/${photo.photo_id}`, {
+                method: "POST",
+                success: (photoInfo) => {
+                    photoInfoRetrieved.push(photo.photo_id);
+
+                    let popup = L.popup({
+                        autoPanPaddingTopLeft: [370, 10],
+                        autoPanPaddingBottomRight: [10, 10],
+                        minWidth: 500,
+                        maxWidth: 500
+                    });
+
+                    popup.setContent(pugrenderPopup({
+                        image_url: photo.url,
+                        title: photoInfo.title,
+                        description: photoInfo.description,
+                        ownername: photoInfo.owner.name,
+                        profileurl: photoInfo.owner.profileurl,
+                        buddyicon: photoInfo.owner.buddyicon
+                    }));
+
+                    marker.bindPopup(popup).openPopup();
+
+                    loadingOverlay(imgcontainer, false);
+                    loadingOverlay(e.target.getElement(), false);
+                    loading = false;
+                }
+            });
         });
     }
+    
+    // Display markers only when images have finished loading.
+    let DOMmarkers = document.getElementsByClassName("leaflet-marker-icon");
+    for(i = 0; i < DOMmarkers.length; i++) {
+        DOMmarkers.item(i).firstChild.onload = (e) => {
+            e.target.parentElement.style.display = "block";
+        };
+    }
+
+    map.fitBounds(markers.getBounds(), {
+        paddingTopLeft: [350 + 30, 30],
+        paddingBottomRight: [30, 30]
+    });
 }
 
 function btnSearch_OnClick() {
@@ -200,10 +201,6 @@ function getPerPage() {
     const columns = 2;
     let rows = Math.floor(DOM.sideimages.clientHeight / 160);
     return columns * rows;
-}
-
-function getSelectedSort() {
-    return DOM.sort.options[DOM.sort.selectedIndex].value;
 }
 
 function loadingOverlay(element, on) {
