@@ -13,12 +13,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-router.route('/')
-    .get((req, res) => {
-        console.log("GET /");
-        res.render('index.pug');
-    })
-    .post((req, res) => {
+router.get("/", (req, res) => {
+    console.log("GET /");
+    res.render("index.pug");
+});
+
+router.post("/imagesearch", (req, res) => {
         let params = req.body;
         console.log("POST /", params);
 
@@ -123,7 +123,6 @@ function getFlickrPhotoInfo(photo_id, callback) {
             })(),
             owner: {
                 name: (owner.realname) ? owner.realname : owner.username,
-                location: owner.location,
                 profileurl: `http://www.flickr.com/people/${owner.nsid}`,
                 buddyicon:
                     (owner.iconserver != 0) ?

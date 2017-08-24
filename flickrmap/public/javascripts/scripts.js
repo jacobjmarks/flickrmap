@@ -38,6 +38,7 @@ function search(text, page, keyoverride) {
     }
     loadingOverlay(DOM.sidebar, true);
     $.ajax(req = {
+        url: "/imagesearch",
         method: "POST",
         data: {
             text: text,
@@ -46,7 +47,7 @@ function search(text, page, keyoverride) {
             per_page: getPerPage()
         },
         success: (rsp) => {
-            lastReq = req;
+            lastReq = req.data;
             processResponse(rsp, false, () => {
                 loadingOverlay(DOM.sidebar, false);
             });
@@ -57,15 +58,16 @@ function search(text, page, keyoverride) {
 function loadMore() {
     loadingOverlay(DOM.sidebar, true);
     $.ajax(req = {
-        method: lastReq.method,
+        url: "/imagesearch",
+        method: "POST",
         data: {
-            text: lastReq.data.text,
-            sort: lastReq.data.sort,
-            page: lastReq.data.page + 1,
+            text: lastReq.text,
+            sort: lastReq.sort,
+            page: lastReq.page + 1,
             per_page: getPerPage()
         },
         success: (rsp) => {
-            lastReq = req;
+            lastReq = req.data;
             processResponse(rsp, true, () => {
                 loadingOverlay(DOM.sidebar, false);
             });
@@ -135,7 +137,7 @@ function processResponse(rsp, scrollToBottom, callback) {
     
             let marker = L.marker([p.lat, p.lon], {icon: icon}).addTo(markers);
 
-            let loading = false;
+            var loading = false;
             marker.on("click", (e) => {
                 if (loading === true || photoInfoRetrieved.indexOf(p.photo_id) !== -1) {
                     return;
@@ -148,21 +150,24 @@ function processResponse(rsp, scrollToBottom, callback) {
                     method: "POST",
                     success: (photoInfo) => {
                         photoInfoRetrieved.push(p.photo_id);
-                        let owner = photoInfo.owner;
 
-                        marker.bindPopup(L.popup({
+                        let popup = L.popup({
                             autoPanPaddingTopLeft: [370, 10],
                             autoPanPaddingBottomRight: [10, 10],
                             minWidth: 500,
                             maxWidth: 500
-                        }).setContent(pugrenderPopup({
+                        });
+
+                        popup.setContent(pugrenderPopup({
                             image_url: p.url,
                             title: photoInfo.title,
                             description: photoInfo.description,
-                            ownername: owner.name,
-                            profileurl: owner.profileurl,
-                            buddyicon: owner.buddyicon
-                        }))).openPopup();
+                            ownername: photoInfo.owner.name,
+                            profileurl: photoInfo.owner.profileurl,
+                            buddyicon: photoInfo.owner.buddyicon
+                        }));
+
+                        marker.bindPopup(popup).openPopup();
 
                         loadingOverlay(imgcontainer, false);
                         loadingOverlay(e.target.getElement(), false);
