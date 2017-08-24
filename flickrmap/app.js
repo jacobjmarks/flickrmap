@@ -93,7 +93,8 @@ function flickrSearch(params, callback) {
 function getFlickrPhotoInfo(photo_id, callback) {
     request(getFlickrApiUrl({
         method: "flickr.photos.getInfo",
-        photo_id: photo_id
+        photo_id: photo_id,
+        extras: "count_faves"
     }), (error, response, body) => {
         let info = JSON.parse(body).photo;
         let owner = info.owner;
@@ -102,13 +103,24 @@ function getFlickrPhotoInfo(photo_id, callback) {
             description: info.description._content,
             views: info.views,
             comments: info.comments._content,
-            tags: ((tagArray)=> {
-                let tags = []
+            faves: info.count_faves,
+            tags: (()=> {
+                let tagArray = info.tags.tag;
+                let tags = [];
                 for(i = 0; i < tagArray.length; i++) {
                     tags.push(tagArray[i].raw);
                 }
                 return tags;
-            })(info.tags.tag),
+            })(),
+            location: (() => {
+                let loc = info.location;
+                let locations = [];
+                locations.push(loc.locality||null);
+                locations.push(loc.county||null);
+                locations.push(loc.region||null);
+                locations.push(loc.country||null);
+                return locations;
+            })(),
             owner: {
                 name: (owner.realname) ? owner.realname : owner.username,
                 location: owner.location,
