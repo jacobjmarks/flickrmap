@@ -114,8 +114,8 @@ function getFlickrPhotoInfo(photo_id, callback) {
                 location: owner.location,
                 profileurl: `http://www.flickr.com/people/${owner.nsid}`,
                 buddyicon:
-                    (owner.iconserver > 0) ?
-                        `http://farm${owner.iconfarm}.staticflickr.com/${owner.iconserver}/buddyicons/${owner.nsid}_r.jpg`
+                    (owner.iconserver != 0) ?
+                        `http://farm${owner.iconfarm}.staticflickr.com/${owner.iconserver}/buddyicons/${owner.nsid}.jpg`
                         :
                         "https://www.flickr.com/images/buddyicon.gif"
             }
