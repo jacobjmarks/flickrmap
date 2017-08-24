@@ -1,3 +1,5 @@
+/* GLOBAL
+*************************************************************************/
 * {
     box-sizing: border-box;
     margin: 0px;
@@ -5,12 +7,16 @@
     /* border: 1px dashed red; */
 }
 
+/* MAP
+*************************************************************************/
 #map {
     position: fixed;
     width: 100%;
     height: 100%;
 }
 
+/* MARKERS
+*************************************************************************/
 .leaflet-marker-icon {
     display: none;
     border: 2px solid white;
@@ -22,6 +28,8 @@
     height: 100%;
 }
 
+/* MARKER POPUPS
+*************************************************************************/
 .leaflet-popup-content-wrapper,
 .leaflet-popup-content,
 .leaflet-popup-content p {
@@ -76,6 +84,8 @@
         margin-top: 10px;
     }
 
+/* BODY/SIDEBAR WRAPPER
+*************************************************************************/
 #content {
     pointer-events: none;
     height: 100%;
@@ -84,6 +94,8 @@
     padding: 10px;
 }
 
+/* SIDEBAR
+*************************************************************************/
 #sidebar {
     pointer-events: all;
     position: relative;
@@ -97,34 +109,33 @@
     box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
+/* HEADER
+************************************************/
 #header {
     display: inline-block;
     text-align: center;
     margin-bottom: 10px;
 }
 
-#header > #title {
+#header #title {
     margin: auto;
     margin-bottom: 5px;
     display: table;
 }
 
-#title > #icon {
+#title #icon {
     display: table-cell;
     vertical-align: middle;
     height: 57px;
 }
 
-#title > h1 {
+#title h1 {
     display: table-cell;
     vertical-align: middle;
     font-size: 3em;
 }
 
-#header > #buttons {
-}
-
-#header > #buttons > button {
+#header #buttons button {
     border: 1px solid grey;
     width: 25%;
     height: 30px;
@@ -132,32 +143,27 @@
     background-color: transparent;
     transition-duration: 0.4s;
 }
+    #header #buttons button:hover {
+        background-color: #F0F0F0;
+    }
 
-#header > #buttons > button {
-}
-
-#header > #buttons > button:hover {
-    background-color: #F0F0F0;
-}
-
-#header > #buttons > #btnLogin {
+#header #buttons #btnLogin {
     border-radius: 10px 0px 0px 10px;
     border-right: none;
 }
 
-#header > #buttons > #btnExplore {
-}
-
-#header > #buttons > #btnPanda {
+#header #buttons #btnPanda {
     border-radius: 0px 10px 10px 0px;
     border-left: none;
 }
 
+/* SEARCH FORM
+************************************************/
 #form {
     margin-bottom: 10px;
 }
 
-#form > #searchbox {
+#form #searchbox {
     margin-bottom: 10px;
     font-size: 1.5em;
     width: 75%;
@@ -168,7 +174,7 @@
     padding: 5px;
 }
 
-#form > #btnSearch {
+#form #btnSearch {
     width: 25%;
     height: 40px;
     font-size: 1em;
@@ -178,29 +184,27 @@
     transition-duration: 0.4s;
     border-radius: 0px 5px 5px 0px;
 }
+    #form #btnSearch:hover {
+        background-color: #F0F0F0;
+    }
 
-#form > #btnSearch:hover {
-    background-color: #F0F0F0;
-}
-
-#form > #options {
+#form #options {
     text-align: center;
 }
+    #form #options p {
+        display: inline-block;
+        font-size: 1em;
+        margin-right: 10px;
+    }
+    #form #options #sortby {
+        margin: auto;
+    }
+        #form #options #sortby #sort {
+            font-size: 1em;
+        }
 
-#form > #options > #sortby {
-    margin: auto;
-}
-
-#form > #options p {
-    display: inline-block;
-    font-size: 1em;
-    margin-right: 10px;
-}
-
-#form > #options > #sortby > #sort {
-    font-size: 1em;
-}
-
+/* SIDEIMAGES
+************************************************/
 #sideimages {
     width: 100%;
     overflow: auto;
@@ -211,11 +215,10 @@
     display: none;
     width: 50%;
 }
-
-.sideimagediv > img {
-    width: 100%;
-    height: auto;
-}
+    .sideimagediv img {
+        width: 100%;
+        height: auto;
+    }
 
 #noresults {
     visibility: hidden;
@@ -251,15 +254,14 @@
     left: 0px;
     right: 0px;
 }
-
-.overlay .loader {
-    z-index: 9999;
-    max-width: 100px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+    .overlay .loader {
+        z-index: 9999;
+        max-width: 100px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
 #sideimages::-webkit-scrollbar {
     width: 10px;
