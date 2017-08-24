@@ -101,7 +101,7 @@ function processResponse(rsp, scrollToBottom, callback) {
             DOM.btnSeeMore.style.visibility = "hidden";
         }
 
-        let usersRetrieved = [];
+        let photoInfoRetrieved = [];
 
         for (i = 0; i < numImages; i++) {
             let p = rsp.photos[i];
@@ -137,17 +137,18 @@ function processResponse(rsp, scrollToBottom, callback) {
 
             let loading = false;
             marker.on("click", (e) => {
-                if (loading === true || usersRetrieved.indexOf(p.url) !== -1) {
+                if (loading === true || photoInfoRetrieved.indexOf(p.photo_id) !== -1) {
                     return;
                 }
                 loadingOverlay(imgcontainer, true);
                 loadingOverlay(e.target.getElement(), true);
                 loading = true;
                 
-                $.ajax(`/user/${p.user_id}`, {
+                $.ajax(`/photo/${p.photo_id}`, {
                     method: "POST",
-                    success: (user) => {
-                        usersRetrieved.push(p.url);
+                    success: (photoInfo) => {
+                        photoInfoRetrieved.push(p.photo_id);
+                        let owner = photoInfo.owner;
 
                         marker.bindPopup(L.popup({
                             autoPanPaddingTopLeft: [370, 10],
@@ -156,10 +157,11 @@ function processResponse(rsp, scrollToBottom, callback) {
                             maxWidth: 500
                         }).setContent(pugrenderPopup({
                             image_url: p.url,
-                            title: p.title,
-                            name: user.name,
-                            profileurl: user.profileurl,
-                            buddyicon: user.buddyicon
+                            title: photoInfo.title,
+                            description: photoInfo.description,
+                            ownername: owner.name,
+                            profileurl: owner.profileurl,
+                            buddyicon: owner.buddyicon
                         }))).openPopup();
 
                         loadingOverlay(imgcontainer, false);

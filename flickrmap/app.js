@@ -38,6 +38,15 @@ router.post("/user/:user_id", (req, res) => {
     });
 })
 
+router.post("/photo/:photo_id", (req, res) => {
+    console.log(`POST /photo/${req.params.photo_id}`);
+    getFlickrPhotoInfo(req.params.photo_id, (photoInfo) => {
+        console.log(` -> SERVING PHOTO INFO`);
+        res.json(photoInfo);
+        res.end();
+    });
+})
+
 app.use(router);
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
@@ -77,6 +86,7 @@ function flickrSearch(params, callback) {
         for (i = 0; i < photos.length; i++) {
             let p = photos[i];
             photoData.photos.push({
+                photo_id: p.id,
                 user_id: p.owner,
                 title: p.title,
                 url: `https://farm${p.farm}.staticflickr.com/${p.server}/${p.id}_${p.secret}.jpg`,
@@ -89,27 +99,31 @@ function flickrSearch(params, callback) {
     });
 }
 
-function getFlickrUserInfo(user_id, callback) {
+function getFlickrPhotoInfo(photo_id, callback) {
     request(getFlickrApiUrl({
-        method: "flickr.people.getInfo",
-        user_id: user_id
+        method: "flickr.photos.getInfo",
+        photo_id: photo_id
     }), (error, response, body) => {
-        let user = JSON.parse(body).person;
-        let userInfo = {
-            name:
-                (user.realname && user.realname._content) ?
-                    user.realname._content
-                    :
-                    user.username._content,
-            location: (user.location) ? user.location._content : null,
-            profileurl: user.profileurl._content,
-            buddyicon:
-                (user.iconserver > 0) ?
-                    `http://farm${user.iconfarm}.staticflickr.com/${user.iconserver}/buddyicons/${user.nsid}_r.jpg`
-                    :
-                    "https://www.flickr.com/images/buddyicon.gif"
+        let info = JSON.parse(body).photo;
+        let owner = info.owner;
+        let clientData = {
+            title: info.title._content,
+            description: info.description._content,
+            views: info.views,
+            comments: info.comments._content,
+            tags: info.tags.tag,
+            owner: {
+                name: (owner.realname) ? owner.realname : owner.username,
+                location: owner.location,
+                profileurl: `http://www.flickr.com/people/${owner.nsid}`,
+                buddyicon:
+                    (owner.iconserver > 0) ?
+                        `http://farm${owner.iconfarm}.staticflickr.com/${owner.iconserver}/buddyicons/${owner.nsid}_r.jpg`
+                        :
+                        "https://www.flickr.com/images/buddyicon.gif"
+            }
         }
-        callback(userInfo);
+        callback(clientData);
     });
 }
 

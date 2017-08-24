@@ -65,7 +65,7 @@
         white-space: nowrap;
         overflow: hidden;
     }
-    .info .name {
+    .info .ownername {
         grid-row: 2;
         font-size: 1.25em;
     }
