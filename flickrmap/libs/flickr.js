@@ -1,8 +1,6 @@
 const request = require('request');
 
-var exports = module.exports;
-
-exports.search = function(params, callback) {
+module.exports.search = function(params, callback) {
     request(formApiUrl({
         method: "flickr.photos.search",
         text: params.text,
@@ -13,29 +11,31 @@ exports.search = function(params, callback) {
         extras: "geo"
     }), (error, response, body) => {
         let results = JSON.parse(body).photos;
-        let photos = results.photo;
 
-        let clientData = {
+        callback({
             page: results.page,
             pages: results.pages,
             total: results.total,
-            photos: []
-        };
-        for (i = 0; i < photos.length; i++) {
-            let photo = photos[i];
-            clientData.photos.push({
-                photo_id: photo.id,
-                url: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`,
-                url_q: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_q.jpg`,
-                lat: photo.latitude,
-                lon: photo.longitude
-            });
-        }
-        callback(clientData);
+            photos: (() => {
+                let photos = [];
+                let numPhotos = results.photo.length;
+                for (i = 0; i < numPhotos; i++) {
+                    let photo = results.photo[i];
+                    photos.push({
+                        photo_id: photo.id,
+                        url: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`,
+                        url_q: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_q.jpg`,
+                        lat: photo.latitude,
+                        lon: photo.longitude
+                    });
+                }
+                return photos;
+            })()
+        });
     });
 }
 
-exports.getPhotoInfo = function(photo_id, callback) {
+module.exports.getPhotoInfo = function(photo_id, callback) {
     request(formApiUrl({
         method: "flickr.photos.getInfo",
         photo_id: photo_id,
@@ -43,23 +43,25 @@ exports.getPhotoInfo = function(photo_id, callback) {
     }), (error, response, body) => {
         let info = JSON.parse(body).photo;
         let owner = info.owner;
-        let clientData = {
+
+        callback({
             title: info.title._content,
             description: info.description._content,
             views: info.views,
             comments: info.comments._content,
             faves: info.count_faves,
             tags: (()=> {
-                let tagArray = info.tags.tag;
                 let tags = [];
-                for(i = 0; i < tagArray.length; i++) {
+                let tagArray = info.tags.tag;
+                let numTags = tagArray.length;
+                for(i = 0; i < numTags; i++) {
                     tags.push(tagArray[i].raw);
                 }
                 return tags;
             })(),
             location: (() => {
-                let loc = info.location;
                 let locations = [];
+                let loc = info.location;
                 locations.push(loc.locality||null);
                 locations.push(loc.county||null);
                 locations.push(loc.region||null);
@@ -67,7 +69,7 @@ exports.getPhotoInfo = function(photo_id, callback) {
                 return locations;
             })(),
             owner: {
-                name: (owner.realname) ? owner.realname : owner.username,
+                name: owner.realname || owner.username,
                 profileurl: `http://www.flickr.com/people/${owner.nsid}`,
                 buddyicon:
                     (owner.iconserver != 0) ?
@@ -75,8 +77,7 @@ exports.getPhotoInfo = function(photo_id, callback) {
                         :
                         "https://www.flickr.com/images/buddyicon.gif"
             }
-        }
-        callback(clientData);
+        });
     });
 }
 
