@@ -29,15 +29,6 @@ router.route('/')
         });
     })
 
-router.post("/user/:user_id", (req, res) => {
-    console.log(`POST /user/${req.params.user_id}`);
-    getFlickrUserInfo(req.params.user_id, (userinfo) => {
-        console.log(` -> SERVING USER INFO`);
-        res.json(userinfo);
-        res.end();
-    });
-})
-
 router.post("/photo/:photo_id", (req, res) => {
     console.log(`POST /photo/${req.params.photo_id}`);
     getFlickrPhotoInfo(req.params.photo_id, (photoInfo) => {
