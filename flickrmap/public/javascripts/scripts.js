@@ -160,24 +160,22 @@ function processResults(results, scrollToBottom, callback) {
                         maxWidth: 500
                     });
 
-                    let contentString = pugrenderPopup({
-                        image_url: photo.url,
-                        title: photoInfo.title,
-                        description: photoInfo.description,
-                        ownername: photoInfo.owner.name,
-                        profileurl: photoInfo.owner.profileurl,
-                        buddyicon: photoInfo.owner.buddyicon
-                    });
-
-                    let contentElement = (() => {
+                    let popupContent = (() => {
                         let tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = contentString;
-                        let element = tempDiv.firstChild;
+                        tempDiv.innerHTML = pugrenderPopup({
+                            image_url: photo.url,
+                            title: photoInfo.title,
+                            description: photoInfo.description,
+                            ownername: photoInfo.owner.name,
+                            profileurl: photoInfo.owner.profileurl,
+                            buddyicon: photoInfo.owner.buddyicon
+                        });
+                        let content = tempDiv.firstChild;
                         tempDiv.remove();
-                        return element;
+                        return content;
                     })();
 
-                    popup.setContent(contentElement);
+                    popup.setContent(popupContent);
                     marker.bindPopup(popup).openPopup();
 
                     loadingOverlay(imgcontainer, false);
