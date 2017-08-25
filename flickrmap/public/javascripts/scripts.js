@@ -160,15 +160,24 @@ function processResults(results, scrollToBottom, callback) {
                         maxWidth: 500
                     });
 
-                    popup.setContent(pugrenderPopup({
+                    let contentString = pugrenderPopup({
                         image_url: photo.url,
                         title: photoInfo.title,
                         description: photoInfo.description,
                         ownername: photoInfo.owner.name,
                         profileurl: photoInfo.owner.profileurl,
                         buddyicon: photoInfo.owner.buddyicon
-                    }));
+                    });
 
+                    let contentElement = (() => {
+                        let tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = contentString;
+                        let element = tempDiv.firstChild;
+                        tempDiv.remove();
+                        return element;
+                    })();
+
+                    popup.setContent(contentElement);
                     marker.bindPopup(popup).openPopup();
 
                     loadingOverlay(imgcontainer, false);
