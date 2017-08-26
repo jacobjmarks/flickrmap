@@ -168,17 +168,24 @@ function processResults(results, scrollToBottom, callback) {
                             description: photoInfo.description,
                             ownername: photoInfo.owner.name,
                             profileurl: photoInfo.owner.profileurl,
-                            buddyicon: photoInfo.owner.buddyicon
+                            buddyicon: photoInfo.owner.buddyicon,
+                            views: photoInfo.views,
+                            comments: photoInfo.comments,
+                            favourites: photoInfo.faves,
+                            tags: photoInfo.tags,
+                            location: photoInfo.location
                         });
                         let content = tempDiv.firstChild;
+
+                        let description = $(content).find(".description");
+                        if (!description.html()) {
+                            description.remove();
+                        }
+
                         tempDiv.remove();
                         return content;
                     })();
 
-                   let description = $(popupContent).find(".description");
-                    if (!description.html()) {
-                        description.remove();
-                    }
 
                     popup.setContent(popupContent);
                     marker.bindPopup(popup).openPopup();
