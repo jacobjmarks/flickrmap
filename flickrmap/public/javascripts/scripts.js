@@ -175,6 +175,11 @@ function processResults(results, scrollToBottom, callback) {
                         return content;
                     })();
 
+                   let description = $(popupContent).find(".description");
+                    if (!description.html()) {
+                        description.remove();
+                    }
+
                     popup.setContent(popupContent);
                     marker.bindPopup(popup).openPopup();
 
