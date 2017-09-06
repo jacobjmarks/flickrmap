@@ -59,7 +59,7 @@
         background: linear-gradient(transparent, black);
     }
         .vfcContainer > div {
-            font-size: medium;
+            font-size: 1.5em;
             color: white;
             margin: auto;
         }
@@ -72,6 +72,13 @@
             .comments {
                 grid-column: 3;
             }
+                .vfcContainer > div > i {
+                    margin: auto 0px;
+                }
+                .vfcContainer > div > p {
+                    display: inline;
+                    margin: auto 10px;
+                }
     .userhref {
         grid-column: 1;
         grid-row: span 2;
@@ -94,6 +101,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        align-self: end;
     }
     .ownername {
         grid-column: 2;
@@ -136,9 +144,13 @@
         padding-top: 5px !important;
         border-top: 1px solid lightgrey;
     }
+        .tags > i {
+            font-size: 1.5em;
+            margin: auto 0px;
+        }
         .tags > p {
             padding: 2px 5px;
-            margin-right: 2px;
+            margin-left: 2px;
             border: 1px solid grey;
             border-radius: 5px;
         }

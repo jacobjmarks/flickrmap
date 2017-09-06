@@ -1,11 +1,17 @@
 .popupcontent
     img.image(src=image_url)
     .info
-        .vfcContainer
-            .views #{views}
-            .favourites #{favourites}
-            .comments #{comments}
         a.userhref(href=profileurl target="_blank")
+        .vfcContainer            
+            .views
+                i(class="fa fa-eye")
+                p #{views}
+            .favourites
+                i(class="fa fa-heart")
+                p #{favourites}
+            .comments
+                i(class="fa fa-comments")
+                p #{comments}
             img.buddyicon(src=buddyicon href=profileurl)
         p.title #{title}
         p.ownername #{ownername}
@@ -16,5 +22,6 @@
             .description!= description
         if (tags.length)
             .tags
+                i(class="fa fa-tags")
                 each tag in tags
                     p= tag
