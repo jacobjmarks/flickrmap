@@ -1,17 +1,20 @@
 .popupcontent
     img.image(src=image_url)
     .info
-        p.title #{title}
+        .vfcContainer
+            .views #{views}
+            .favourites #{favourites}
+            .comments #{comments}
         a.userhref(href=profileurl target="_blank")
             img.buddyicon(src=buddyicon href=profileurl)
+        p.title #{title}
         p.ownername #{ownername}
-        p.description #{description}
-        .views #{views}
-        .favourites #{favourites}
-        .comments #{comments}
-        .tags
-            each tag in tags
-                p= tag
         .location
             each loc in location
                 p= loc._content
+        if (description)
+            .description #{description}
+        if (tags.length)
+            .tags
+                each tag in tags
+                    p= tag

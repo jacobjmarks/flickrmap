@@ -176,16 +176,9 @@ function processResults(results, scrollToBottom, callback) {
                             location: photoInfo.location
                         });
                         let content = tempDiv.firstChild;
-
-                        let description = $(content).find(".description");
-                        if (!description.html()) {
-                            description.remove();
-                        }
-
                         tempDiv.remove();
                         return content;
                     })();
-
 
                     popup.setContent(popupContent);
                     marker.bindPopup(popup).openPopup();
