@@ -9,7 +9,9 @@
         .views #{views}
         .favourites #{favourites}
         .comments #{comments}
-        .tags #{tags}
+        .tags
+            each tag in tags
+                p= tag
         .location
-            each val in location
-                p= val._content
+            each loc in location
+                p= loc._content
