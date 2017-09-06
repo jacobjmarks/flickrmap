@@ -12,8 +12,8 @@
         .location
             each loc in location
                 p= loc._content
-        if (description)
-            .description #{description}
+        if (description.trim())
+            .description!= description
         if (tags.length)
             .tags
                 each tag in tags
