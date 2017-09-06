@@ -45,6 +45,7 @@ module.exports.getPhotoInfo = function(photo_id, callback) {
         let owner = info.owner;
 
         callback({
+            photohref: `https://www.flickr.com/photos/${owner.nsid}/${photo_id}`,
             title: info.title._content,
             description: info.description._content,
             views: info.views,
@@ -70,7 +71,7 @@ module.exports.getPhotoInfo = function(photo_id, callback) {
             })(),
             owner: {
                 name: owner.realname || owner.username,
-                profileurl: `http://www.flickr.com/people/${owner.nsid}`,
+                profilehref: `http://www.flickr.com/people/${owner.nsid}`,
                 buddyicon:
                     (owner.iconserver != 0) ?
                         `http://farm${owner.iconfarm}.staticflickr.com/${owner.iconserver}/buddyicons/${owner.nsid}.jpg`

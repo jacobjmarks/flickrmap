@@ -57,6 +57,7 @@
         height: 30px;
         display: grid;
         background: linear-gradient(transparent, black);
+        pointer-events: none;
     }
         .vfcContainer > div {
             font-size: 1.5em;

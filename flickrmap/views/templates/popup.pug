@@ -1,7 +1,8 @@
 .popupcontent
-    img.image(src=image_url)
+    a.photohref(href=photohref)
+        img.image(src=photourl)
     .info
-        .vfcContainer            
+        .vfcContainer
             .views
                 i(class="fa fa-eye")
                 p #{views}
@@ -11,7 +12,7 @@
             .comments
                 i(class="fa fa-comments")
                 p #{comments}
-        a.userhref(href=profileurl)
+        a.userhref(href=profilehref)
             img.buddyicon(src=buddyicon href=profileurl)
         p.title #{title}
         p.ownername #{ownername}

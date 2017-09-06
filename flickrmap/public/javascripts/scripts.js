@@ -163,11 +163,12 @@ function processResults(results, scrollToBottom, callback) {
                     let popupContent = (() => {
                         let tempDiv = document.createElement('div');
                         tempDiv.innerHTML = pugrenderPopup({
-                            image_url: photo.url,
+                            photohref: photoInfo.photohref,
+                            photourl: photo.url,
                             title: photoInfo.title,
                             description: photoInfo.description,
                             ownername: photoInfo.owner.name,
-                            profileurl: photoInfo.owner.profileurl,
+                            profilehref: photoInfo.owner.profilehref,
                             buddyicon: photoInfo.owner.buddyicon,
                             views: photoInfo.views,
                             comments: photoInfo.comments,
