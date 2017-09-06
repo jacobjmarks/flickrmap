@@ -25,4 +25,4 @@
             .tags
                 i(class="fa fa-tags")
                 each tag in tags
-                    p= tag
+                    p(onclick=`search('${tag}', 1, 1); DOM.searchbox.value='${tag}'`)= tag
