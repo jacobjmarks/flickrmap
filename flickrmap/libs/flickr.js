@@ -62,10 +62,10 @@ module.exports.getPhotoInfo = function(photo_id, callback) {
             location: (() => {
                 let locations = [];
                 let loc = info.location;
-                locations.push(loc.locality||null);
-                locations.push(loc.county||null);
-                locations.push(loc.region||null);
-                locations.push(loc.country||null);
+                if (loc.locality) { locations.push(loc.locality); }
+                if (loc.county)   { locations.push(loc.county);   }
+                if (loc.region)   { locations.push(loc.region);   }
+                if (loc.country)  { locations.push(loc.country);  }
                 return locations;
             })(),
             owner: {

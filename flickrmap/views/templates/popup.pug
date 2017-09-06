@@ -10,4 +10,6 @@
         .favourites #{favourites}
         .comments #{comments}
         .tags #{tags}
-        .location #{location}
+        .location
+            each val in location
+                p= val._content
