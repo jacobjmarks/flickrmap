@@ -86,6 +86,19 @@ function loadMore() {
     });
 }
 
+function getTweets(params) {
+    $.ajax({
+        url: "/tweets",
+        method: "POST",
+        data: {
+            q: params.q
+        },
+        success: (rsp) => {
+            console.log(rsp);
+        }
+    });
+}
+
 function processResults(results, callback) {
     function clearImages() {
         while(DOM.sideimages.lastChild) {
@@ -185,6 +198,12 @@ function processResults(results, callback) {
                         tempDiv.remove();
                         return content;
                     })();
+
+                    popupContent.getElementsByClassName("btnGetTweets")[0].onclick = () => {
+                        getTweets({
+                            q: photoInfo.title
+                        });
+                    };
 
                     popup.setContent(popupContent);
                     marker.bindPopup(popup).openPopup();

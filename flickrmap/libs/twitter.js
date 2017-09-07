@@ -2,7 +2,9 @@ const request = require('request');
 
 module.exports.search = function(params, callback) {
     request({
-        url: formTwitterSearchUrl({q: "flickr"}),
+        url: formTwitterSearchUrl({
+            q: params.q
+        }),
         headers: {
             "Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAACDo2AAAAAAAz6ao0%2FMUkZu8gW%2FgmrCE%2BulTm3g%3Dzj5FugfIcc4achD0eQNR1D0bENs8dzssMAlMALRil0cf3WvRMN"
         }

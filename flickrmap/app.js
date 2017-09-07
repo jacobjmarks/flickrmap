@@ -41,7 +41,9 @@ router.post("/photo/:photo_id", (req, res) => {
 })
 
 router.post("/tweets", (req, res) => {
-    twitter.search({}, (tweets) => {
+    let params = req.body;
+    console.log("POST /tweets", params);
+    twitter.search(params, (tweets) => {
         res.json(JSON.parse(tweets.body));
         res.end();
     })
