@@ -160,6 +160,21 @@
             .tags > p:hover {
                 background-color: #F0F0F0;
             }
+    .btnGetTweets {
+        grid-column: span 3;
+        grid-row: 5;
+        justify-self: right;
+        width: min-content;
+        float: right;
+        white-space: nowrap;
+        margin-top: 5px;
+        background-color: #00aced;
+        font-size: 1.25em;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+    }
 
 /* BODY/SIDEBAR WRAPPER
 *************************************************************************/
