@@ -27,6 +27,7 @@ window.onload = function() {
         btnSeeMore: document.getElementById("btnSeeMore"),
         searchbox: document.getElementById("searchbox"),
         sort: document.getElementById("sort"),
+        perpage: document.getElementById("perpage"),
         overlay: document.getElementById("overlay"),
         loader: document.getElementById("loader")
     };
@@ -48,7 +49,7 @@ function search(text, page, keyoverride) {
         },
         success: (rsp) => {
             lastReq = req.data;
-            processResults(rsp, false, () => {
+            processResults(rsp, () => {
                 loadingOverlay(DOM.sidebar, false);
             });
         }
@@ -78,14 +79,14 @@ function loadMore() {
         },
         success: (rsp) => {
             lastReq = req.data;
-            processResults(rsp, true, () => {
+            processResults(rsp, () => {
                 loadingOverlay(DOM.sidebar, false);
             });
         }
     });
 }
 
-function processResults(results, scrollToBottom, callback) {
+function processResults(results, callback) {
     function clearImages() {
         while(DOM.sideimages.lastChild) {
             DOM.sideimages.removeChild(DOM.sideimages.lastChild);
@@ -114,9 +115,10 @@ function processResults(results, scrollToBottom, callback) {
     
     DOM.noresults.style.visibility = "hidden";
 
-    let imagesLoaded = 0;
-    let photoInfoRetrieved = [];
+    callback();
 
+    let photoInfoRetrieved = [];
+    
     for (i = 0; i < numImages; i++) {
         let photo = results.photos[i];
         let imgcontainer = document.createElement('div');
@@ -126,13 +128,6 @@ function processResults(results, scrollToBottom, callback) {
         img.src = photo.url_q;
         img.onload = (e) => {
             e.target.parentElement.style.display = "inline-block";
-            imagesLoaded++;
-            if (imagesLoaded == numImages) {
-                callback();
-                if (scrollToBottom) {
-                    $("#sideimages").animate({scrollTop: DOM.sideimages.scrollHeight}, 1500);
-                }
-            }
         }
         
         imgcontainer.onclick = () => {
@@ -221,9 +216,11 @@ function btnSearch_OnClick() {
 }
 
 function getPerPage() {
-    const columns = 2;
-    let rows = Math.floor(DOM.sideimages.clientHeight / 160);
-    return columns * rows;
+    return DOM.perpage.value;
+    // OLD DYNAMIC METHOD
+    // const columns = 2;
+    // let rows = Math.floor(DOM.sideimages.clientHeight / 160);
+    // return columns * rows;
 }
 
 function loadingOverlay(element, on) {
