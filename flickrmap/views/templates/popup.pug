@@ -18,11 +18,11 @@
         p.ownername #{ownername}
         .location
             each loc in location
-                p= loc._content
+                p(onclick=`locationSearch('${loc._content}')`)= loc._content
         if (description.trim())
             .description!= description
         if (tags.length)
             .tags
                 i(class="fa fa-tags")
                 each tag in tags
-                    p(onclick=`search('${tag}', 1, 1); DOM.searchbox.value='${tag}'`)= tag
+                    p(onclick=`tagSearch('${tag}')`)= tag

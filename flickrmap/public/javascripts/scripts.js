@@ -55,6 +55,16 @@ function search(text, page, keyoverride) {
     });
 }
 
+function tagSearch(tag) {
+    DOM.searchbox.value = tag;
+    search(tag, 1, 1);
+}
+
+function locationSearch(location) {
+    DOM.searchbox.value = location;
+    search(location, 1, 1);
+}
+
 function loadMore() {
     loadingOverlay(DOM.sidebar, true);
     $.ajax(req = {
