@@ -29,7 +29,7 @@ html
                     input(id="searchbox" placeholder="Search..." onkeyup="search(this.value, 1)")
                     button(id="btnSearch" onclick="btnSearch_OnClick()") Search
                     #options
-                        #sortby
+                        #sortbydiv
                             p Sort By:
                             select(id="sort")
                                 option(value="relevance") Relevance
@@ -37,6 +37,12 @@ html
                                 option(value="interestingness-asc") Interestingness - Least
                                 option(value="date-posted-desc") Date Posted - Newest
                                 option(value="date-posted-asc") Date Posted - Oldest
+                        #perpagediv
+                            p Per Page:
+                            select(id="perpage")
+                                option(value=20 selected="true") 20
+                                option(value=50) 50
+                                option(value=100) 100
                 #sideimages
                 p#noresults No Results :(
                 button(id="btnSeeMore" onclick="loadMore()")

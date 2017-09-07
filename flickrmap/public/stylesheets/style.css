@@ -242,7 +242,6 @@
 }
 
 #form #searchbox {
-    margin-bottom: 10px;
     font-size: 1.5em;
     width: 75%;
     height: 40px;
@@ -269,18 +268,27 @@
 
 #form #options {
     text-align: center;
+    margin-top: 10px;
 }
-    #form #options p {
+    #options p {
         display: inline-block;
-        font-size: 1em;
-        margin-right: 10px;
+        margin-right: 5px;
     }
-    #form #options #sortby {
+    #options > div {
         margin: auto;
     }
-        #form #options #sortby #sort {
-            font-size: 1em;
+        #options > div > * {            
+            font-size: small;
         }
+        #options > div:not(:first-child) {
+            /* margin-top: 5px; */
+        }
+            #options #sortbydiv {
+                float: left;
+            }
+            #options #perpagediv {
+                float: right;
+            }
 
 /* SIDEIMAGES
 ************************************************/
