@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const flickr = require('./libs/flickr.js');
+const twitter = require('./libs/twitter.js');
 
 const router = express.Router();
 const app = express();
@@ -38,6 +39,13 @@ router.post("/photo/:photo_id", (req, res) => {
         res.end();
     });
 })
+
+router.post("/tweets", (req, res) => {
+    twitter.search({}, (tweets) => {
+        res.json(JSON.parse(tweets.body));
+        res.end();
+    })
+});
 
 app.use(router);
 app.listen(port, () => {
