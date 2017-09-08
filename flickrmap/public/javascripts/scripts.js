@@ -91,11 +91,19 @@ function getTweets(params) {
         url: "/tweets",
         method: "POST",
         data: {
-            q: params.q,
             geocode: params.geocode
         },
         success: (rsp) => {
             console.log(rsp);
+            let media = 0;
+            let numTweets = rsp.statuses.length;
+            for (let i = 0; i < numTweets; i++) {
+                let tweet = rsp.statuses[i];
+                if (tweet.entities.media) {
+                    media++;
+                }
+            }
+            console.log(`${media}/${numTweets}`);
         }
     });
 }
@@ -202,13 +210,6 @@ function processResults(results, callback) {
 
                     popupContent.getElementsByClassName("btnGetTweets")[0].onclick = () => {
                         getTweets({
-                            q: (() => {
-                                let queries = [
-                                    photoInfo.title,
-                                    photoInfo.tags.join(" OR ")
-                                ]
-                                return queries.join(" OR ");
-                            })(),
                             geocode: `${photo.lat},${photo.lon},10km`
                         });
                     };
