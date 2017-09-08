@@ -91,7 +91,8 @@ function getTweets(params) {
         url: "/tweets",
         method: "POST",
         data: {
-            q: params.q
+            q: params.q,
+            geocode: params.geocode
         },
         success: (rsp) => {
             console.log(rsp);
@@ -201,7 +202,14 @@ function processResults(results, callback) {
 
                     popupContent.getElementsByClassName("btnGetTweets")[0].onclick = () => {
                         getTweets({
-                            q: photoInfo.title
+                            q: (() => {
+                                let queries = [
+                                    photoInfo.title,
+                                    photoInfo.tags.join(" OR ")
+                                ]
+                                return queries.join(" OR ");
+                            })(),
+                            geocode: `${photo.lat},${photo.lon},10km`
                         });
                     };
 
