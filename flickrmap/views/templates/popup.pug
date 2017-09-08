@@ -14,7 +14,7 @@
                 p #{comments}
         a.userhref(href=profilehref)
             img.buddyicon(src=buddyicon href=profileurl)
-        p.title #{title}
+        p.title= (title) ? title : "Untitled"
         p.ownername #{ownername}
         .location
             each loc in location
