@@ -19,13 +19,18 @@
         .location
             each loc in location
                 p(onclick=`locationSearch('${loc._content}')`)= loc._content
-        if (description.trim())
-            .description!= description
-        if (tags.length)
-            .tags
-                i(class="fa fa-tags")
+        .description
+            if (description.trim())
+                != description
+            else
+                | No Description
+        .tags
+            i(class="fa fa-tags")
+            if (tags.length)
                 each tag in tags
                     p.button(onclick=`tagSearch('${tag}')`)= tag
+            else
+                p No Tags
         button.button.btnGetTweets
             i(class="fa fa-twitter")
             |  Find Nearby Tweets
