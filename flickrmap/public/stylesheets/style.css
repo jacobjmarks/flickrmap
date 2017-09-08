@@ -135,6 +135,8 @@
         margin-top: 5px !important;
         padding-top: 5px !important;
         border-top: 1px solid lightgrey;
+        max-height: 100px;
+        overflow: auto;
     }
     .tags {
         grid-column: span 3;
