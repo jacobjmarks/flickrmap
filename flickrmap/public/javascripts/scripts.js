@@ -86,7 +86,7 @@ function loadMore() {
     });
 }
 
-function getTweets(params, popup) {
+function getTweets(params, container, callback) {
     $.ajax({
         url: "/tweets",
         method: "POST",
@@ -94,7 +94,8 @@ function getTweets(params, popup) {
             geocode: params.geocode
         },
         success: (rsp) => {
-            processTweets(rsp.tweets, popup);
+            callback();
+            processTweets(rsp.tweets, container);
         }
     });
 }
@@ -200,9 +201,17 @@ function processResults(results, callback) {
                     })();
 
                     popupContent.getElementsByClassName("btnGetTweets")[0].onclick = () => {
-                        getTweets({
-                            geocode: `${photo.lat},${photo.lon},10km`
-                        }, popup);
+                        let tweetsContainer = popupContent.getElementsByClassName("tweetsContainer")[0];
+                        
+                        if (!tweetsContainer.innerHTML) {
+                            getTweets({
+                                geocode: `${photo.lat},${photo.lon},10km`
+                            }, tweetsContainer, () => {
+                                tweetsContainer.style.visibility = "visible";
+                            });
+                        } else {
+                            tweetsContainer.style.visibility = "visible";
+                        }
                     };
 
                     popup.setContent(popupContent);
@@ -230,19 +239,19 @@ function processResults(results, callback) {
     });
 }
 
-function processTweets(tweets, popup) {
-    console.log(tweets);
-    let newPopupContent = (() => {
+function processTweets(tweets, container) {
+    container.appendChild((() => {
         let tempDiv = document.createElement('div');
         tempDiv.innerHTML = pugrenderTweets({
             tweets: tweets
         });
         let content = tempDiv.firstChild;
         tempDiv.remove();
+        content.getElementsByClassName("btnCloseTweets")[0].onclick = () => {
+            container.style.visibility = "hidden";
+        }
         return content;
-    })();
-
-    popup.setContent(newPopupContent);
+    })());
 }
 
 function btnSearch_OnClick() {
