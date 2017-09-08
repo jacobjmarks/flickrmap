@@ -9,7 +9,31 @@ module.exports.search = function(params, callback) {
             "Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAACDo2AAAAAAAz6ao0%2FMUkZu8gW%2FgmrCE%2BulTm3g%3Dzj5FugfIcc4achD0eQNR1D0bENs8dzssMAlMALRil0cf3WvRMN"
         }
     }, (error, response, body) => {
-        callback(JSON.parse(body));
+        let tweets = JSON.parse(body).statuses;
+        callback({
+            tweets: (() => {
+                let tweetArray = [];
+                let numTweets = tweets.length;
+                for (let i = 0; i < numTweets; i++) {
+                    let t = tweets[i];
+                    if (t.entities.media) {
+                        let m = t.entities.media[0];
+                        tweetArray.push({
+                            image_url: m.media_url,
+                            tweet_url: m.url
+                        });
+                    } else if (t.extended_entities && t.extended_entities.media) {
+                        console.log("EXTENDED MEDIA");
+                        let em = t.extended_entities.media[0];
+                        tweetArray.push({
+                            image_url: em.media_url,
+                            tweet_url: em.url
+                        });
+                    }
+                }
+                return tweetArray;
+            })()
+        });
     });
 }
 
@@ -27,6 +51,6 @@ function formTwitterSearchUrl(customParams) {
             let val = params[key];
             url += `&${key}=${val}`;
         }
-        
+
         return url;
 }

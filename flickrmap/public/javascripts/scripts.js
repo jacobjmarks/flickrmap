@@ -86,7 +86,7 @@ function loadMore() {
     });
 }
 
-function getTweets(params) {
+function getTweets(params, popup) {
     $.ajax({
         url: "/tweets",
         method: "POST",
@@ -94,16 +94,7 @@ function getTweets(params) {
             geocode: params.geocode
         },
         success: (rsp) => {
-            console.log(rsp);
-            let media = 0;
-            let numTweets = rsp.statuses.length;
-            for (let i = 0; i < numTweets; i++) {
-                let tweet = rsp.statuses[i];
-                if (tweet.entities.media) {
-                    media++;
-                }
-            }
-            console.log(`${media}/${numTweets}`);
+            processTweets(rsp.tweets, popup);
         }
     });
 }
@@ -211,7 +202,7 @@ function processResults(results, callback) {
                     popupContent.getElementsByClassName("btnGetTweets")[0].onclick = () => {
                         getTweets({
                             geocode: `${photo.lat},${photo.lon},10km`
-                        });
+                        }, popup);
                     };
 
                     popup.setContent(popupContent);
@@ -237,6 +228,9 @@ function processResults(results, callback) {
         paddingTopLeft: [350 + 30, 30],
         paddingBottomRight: [30, 30]
     });
+}
+
+function processTweets(tweets, popup) {
 }
 
 function btnSearch_OnClick() {
