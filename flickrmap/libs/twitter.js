@@ -41,7 +41,7 @@ function formTwitterSearchUrl(customParams) {
     let url = "https://api.twitter.com/1.1/search/tweets.json?";
     
         const globalParams = {
-            q: "-RT filter:images",
+            q: "filter:images filter:safe -filter:retweets",
             tweet_mode: "extended"
         };
     
