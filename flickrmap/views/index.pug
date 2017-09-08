@@ -22,12 +22,12 @@ html
                         img(id="icon" src="/images/icon.png", alt="icon")
                         h1 FlickrMap
                     #buttons
-                        button(id="btnLogin" onclick="login()") Login
-                        button(id="btnExplore" onclick="explore()") Explore
-                        button(id="btnPanda" onclick="panda()") Panda
+                        button.button(id="btnLogin" onclick="login()") Login
+                        button.button(id="btnExplore" onclick="explore()") Explore
+                        button.button(id="btnPanda" onclick="panda()") Panda
                 #form
                     input(id="searchbox" placeholder="Search..." onkeyup="search(this.value, 1)")
-                    button(id="btnSearch" onclick="btnSearch_OnClick()") Search
+                    button.button(id="btnSearch" onclick="btnSearch_OnClick()") Search
                     #options
                         #sortbydiv
                             p Sort By:
@@ -45,5 +45,5 @@ html
                                 option(value=100) 100
                 #sideimages
                 p#noresults No Results :(
-                button(id="btnSeeMore" onclick="loadMore()")
+                button.button(id="btnSeeMore" onclick="loadMore()")
                     img(src="/images/down-arrow-24.png")
