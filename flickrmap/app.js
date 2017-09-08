@@ -56,8 +56,8 @@ app.listen(port, () => {
 
 // Generate and write client-side js PUG templates...
 console.log("Writing PUG templates...");
-fs.writeFile(
-    "public/javascripts/pugtemplates.js",
+fs.writeFile("public/javascripts/pugtemplates.js", 
     pug.compileFileClient("views/templates/popup.pug", {name: "pugrenderPopup"})
-);
+    + "\n\n" +
+    pug.compileFileClient("views/templates/tweets.pug", {name: "pugrenderTweets"}));
 console.log(" -> DONE");

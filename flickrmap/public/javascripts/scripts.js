@@ -231,6 +231,18 @@ function processResults(results, callback) {
 }
 
 function processTweets(tweets, popup) {
+    console.log(tweets);
+    let newPopupContent = (() => {
+        let tempDiv = document.createElement('div');
+        tempDiv.innerHTML = pugrenderTweets({
+            tweets: tweets
+        });
+        let content = tempDiv.firstChild;
+        tempDiv.remove();
+        return content;
+    })();
+
+    popup.setContent(newPopupContent);
 }
 
 function btnSearch_OnClick() {
