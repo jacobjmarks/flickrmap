@@ -86,20 +86,6 @@ function loadMore() {
     });
 }
 
-function getTweets(params, container, callback) {
-    $.ajax({
-        url: "/tweets",
-        method: "POST",
-        data: {
-            geocode: params.geocode
-        },
-        success: (rsp) => {
-            callback();
-            processTweets(rsp.tweets, container);
-        }
-    });
-}
-
 function processResults(results, callback) {
     function clearImages() {
         while(DOM.sideimages.lastChild) {
@@ -200,20 +186,6 @@ function processResults(results, callback) {
                         return content;
                     })();
 
-                    popupContent.getElementsByClassName("btnGetTweets")[0].onclick = () => {
-                        let tweetsContainer = popupContent.getElementsByClassName("tweetsContainer")[0];
-                        
-                        if (!tweetsContainer.innerHTML) {
-                            getTweets({
-                                geocode: `${photo.lat},${photo.lon},10km`
-                            }, tweetsContainer, () => {
-                                tweetsContainer.style.visibility = "visible";
-                            });
-                        } else {
-                            tweetsContainer.style.visibility = "visible";
-                        }
-                    };
-
                     popup.setContent(popupContent);
                     marker.bindPopup(popup).openPopup();
 
@@ -237,33 +209,6 @@ function processResults(results, callback) {
         paddingTopLeft: [350 + 30, 30],
         paddingBottomRight: [30, 30]
     });
-}
-
-function processTweets(tweets, container) {
-    console.log(tweets);
-    twttr.widgets.load(container);
-    let numTweets = tweets.length;
-    for (let i = 0; i < numTweets; i++) {
-        twttr.widgets.createTweet(
-            tweets[i].id,
-            container,
-            {}
-        ).then(function (el) {
-            console.log("Tweet " + (i+1) + " displayed.");
-        });
-    }
-    // container.appendChild((() => {
-    //     let tempDiv = document.createElement('div');
-    //     tempDiv.innerHTML = pugrenderTweets({
-    //         tweets: tweets
-    //     });
-    //     let content = tempDiv.firstChild;
-    //     tempDiv.remove();
-    //     content.getElementsByClassName("btnCloseTweets")[0].onclick = () => {
-    //         container.style.visibility = "hidden";
-    //     }
-    //     return content;
-    // })());
 }
 
 function btnSearch_OnClick() {

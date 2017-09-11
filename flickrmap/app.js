@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs');
 
 const flickr = require('./libs/flickr.js');
-const twitter = require('./libs/twitter.js');
 
 const router = express.Router();
 const app = express();
@@ -40,15 +39,6 @@ router.post("/photo/:photo_id", (req, res) => {
     });
 })
 
-router.post("/tweets", (req, res) => {
-    let params = req.body;
-    console.log("POST /tweets", params);
-    twitter.search(params, (tweets) => {
-        res.json(tweets);
-        res.end();
-    })
-});
-
 app.use(router);
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
@@ -56,8 +46,7 @@ app.listen(port, () => {
 
 // Generate and write client-side js PUG templates...
 console.log("Writing PUG templates...");
-fs.writeFile("public/javascripts/pugtemplates.js", 
-    pug.compileFileClient("views/templates/popup.pug", {name: "pugrenderPopup"})
-    + "\n\n" +
-    pug.compileFileClient("views/templates/tweets.pug", {name: "pugrenderTweets"}));
+fs.writeFile(
+    "public/javascripts/pugtemplates.js",
+    pug.compileFileClient("views/templates/popup.pug", {name: "pugrenderPopup"}));
 console.log(" -> DONE");
