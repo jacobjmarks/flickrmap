@@ -25,11 +25,8 @@
             else
                 | No Description
         .tags
-            if (tags.length)
-                each tag in tags
-                    tag.button(onclick=`tagSearch('${tag}')`)= tag
-            else
-                p No Tags
+            each tag in tags
+                tag.button(onclick=`tagSearch('${tag}')`)= tag
         .gvision
             i(class="fa fa-google")
             | oogle Vision&nbsp;
