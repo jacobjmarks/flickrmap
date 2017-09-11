@@ -15,21 +15,9 @@ module.exports.search = function(params, callback) {
                 let tweetArray = [];
                 let numTweets = tweets.length;
                 for (let i = 0; i < numTweets; i++) {
-                    let t = tweets[i];
-                    if (t.entities.media) {
-                        let m = t.entities.media[0];
-                        tweetArray.push({
-                            image_url: m.media_url,
-                            tweet_url: m.url
-                        });
-                    } else if (t.extended_entities && t.extended_entities.media) {
-                        console.log("EXTENDED MEDIA");
-                        let em = t.extended_entities.media[0];
-                        tweetArray.push({
-                            image_url: em.media_url,
-                            tweet_url: em.url
-                        });
-                    }
+                    tweetArray.push({
+                        id: tweets[i].id_str
+                    });
                 }
                 return tweetArray;
             })()

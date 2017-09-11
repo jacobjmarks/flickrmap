@@ -191,9 +191,9 @@
     right: 0px;
     background-color: rgba(255, 255, 255, 0.84);
     border-radius: 12px;
-    display: flex;
     z-index: 1;
-    overflow-y: scroll;
+    overflow-y: overlay;
+    padding: 10px 20px;
 }
     .tweetsContainer .tweetImage {
         width: 33.33%;

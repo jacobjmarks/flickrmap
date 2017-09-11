@@ -240,18 +240,30 @@ function processResults(results, callback) {
 }
 
 function processTweets(tweets, container) {
-    container.appendChild((() => {
-        let tempDiv = document.createElement('div');
-        tempDiv.innerHTML = pugrenderTweets({
-            tweets: tweets
+    console.log(tweets);
+    twttr.widgets.load(container);
+    let numTweets = tweets.length;
+    for (let i = 0; i < numTweets; i++) {
+        twttr.widgets.createTweet(
+            tweets[i].id,
+            container,
+            {}
+        ).then(function (el) {
+            console.log("Tweet " + (i+1) + " displayed.");
         });
-        let content = tempDiv.firstChild;
-        tempDiv.remove();
-        content.getElementsByClassName("btnCloseTweets")[0].onclick = () => {
-            container.style.visibility = "hidden";
-        }
-        return content;
-    })());
+    }
+    // container.appendChild((() => {
+    //     let tempDiv = document.createElement('div');
+    //     tempDiv.innerHTML = pugrenderTweets({
+    //         tweets: tweets
+    //     });
+    //     let content = tempDiv.firstChild;
+    //     tempDiv.remove();
+    //     content.getElementsByClassName("btnCloseTweets")[0].onclick = () => {
+    //         container.style.visibility = "hidden";
+    //     }
+    //     return content;
+    // })());
 }
 
 function btnSearch_OnClick() {
