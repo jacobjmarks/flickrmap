@@ -142,9 +142,10 @@
         grid-row: 3;
         margin-top: 5px !important;
         padding-top: 5px !important;
-        border-top: 1px solid lightgrey;
         max-height: 100px;
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        border-top: 1px solid lightgrey;
     }
     .tags {
         grid-column: span 3;
@@ -152,18 +153,31 @@
         display: inline-flex;
         white-space: nowrap;
         overflow: hidden;
-        margin-top: 5px !important;
-        padding-top: 5px !important;
-        border-top: 1px solid lightgrey;
+        margin: 5px 0px !important;
+        padding: 0px 0px 5px 0px !important;
+        border-bottom: 1px solid lightgrey;
     }
-        .tags > i {
-            font-size: 1.5em;
-            margin: auto 0px;
-        }
-        .tags > p {
+        .tags > tag {
             padding: 2px 5px;
-            margin-left: 2px;
+            margin-right: 2px;
+            border-color: #DFDFDF;
         }
+    .gvision {
+        grid-column: span 3;
+        grid-row: 5;
+        font-size: 1.25em;
+    }
+        .gvision .gvision_results {
+        }
+            .gvision_results .labels {
+            }
+                .labels > label {
+                    display: inline-block;
+                    padding: 2px 5px;
+                    margin-right: 2px;
+                    margin-top: 2px;
+                    font-size: small;
+                }
         
 /* BODY/SIDEBAR WRAPPER
 *************************************************************************/

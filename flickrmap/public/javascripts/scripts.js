@@ -208,6 +208,8 @@ function processResults(results, callback) {
                                     return content;
                                 })()
                             );
+
+                            $(".fa-cog").hide();
                         }
                     })
                 }

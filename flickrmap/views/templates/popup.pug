@@ -15,7 +15,7 @@
         a.userhref(href=profilehref)
             img.buddyicon(src=buddyicon href=profileurl)
         p.title= (title) ? title : "Untitled"
-        p.ownername #{ownername}
+        p.ownername(href=profilehref) #{ownername}
         .location
             each loc in location
                 p(onclick=`locationSearch('${loc._content}')`)= loc._content
@@ -25,13 +25,12 @@
             else
                 | No Description
         .tags
-            i(class="fa fa-tags")
             if (tags.length)
                 each tag in tags
-                    p.button(onclick=`tagSearch('${tag}')`)= tag
+                    tag.button(onclick=`tagSearch('${tag}')`)= tag
             else
                 p No Tags
         .gvision
             i(class="fa fa-google")
-            | oogle Vision
+            | oogle Vision&nbsp;
             i(class="fa fa-cog fa-spin")
