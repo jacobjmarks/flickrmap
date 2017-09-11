@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const flickr = require('./libs/flickr.js');
+const gvision = require('./libs/gvision.js');
 
 const router = express.Router();
 const app = express();
@@ -38,6 +39,14 @@ router.post("/photo/:photo_id", (req, res) => {
         res.end();
     });
 })
+
+router.post("/annotate/:image_url", (req, res) => {
+    console.log(`POST /annotate/${req.params.image_url}`);
+    gvision.annotate(req.params.image_url, (annotations) => {
+        res.json(annotations);
+        res.end();
+    });
+});
 
 app.use(router);
 app.listen(port, () => {
