@@ -57,5 +57,7 @@ app.listen(port, () => {
 console.log("Writing PUG templates...");
 fs.writeFile(
     "public/javascripts/pugtemplates.js",
-    pug.compileFileClient("views/templates/popup.pug", {name: "pugrenderPopup"}));
+    pug.compileFileClient("views/templates/popup.pug", {name: "pugrenderPopup"})
+    + "\n\n" +
+    pug.compileFileClient("views/templates/annotations.pug", {name: "pugrenderAnnotations"}));
 console.log(" -> DONE");
