@@ -1,7 +1,9 @@
 .gvision
     .landmark
-        if (landmark)
-            =annotations.landmark.description
+        if (landmarks)
+            each landmark in landmarks
+                p= landmark.description
     .labels
-        each label in annotations.labels
-            p= label.description
+        if (labels)
+            each label in labels
+                p= label.description

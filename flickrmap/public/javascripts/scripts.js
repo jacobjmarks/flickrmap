@@ -196,7 +196,18 @@ function processResults(results, callback) {
                     $.ajax(`/annotate/${encodeURIComponent(photo.url)}`, {
                         method: "POST",
                         success: (annotations) => {
-                            console.log(annotations);
+                            popupContent.getElementsByClassName("info")[0].appendChild(
+                                (() => {
+                                    let tempDiv = document.createElement('div');
+                                    tempDiv.innerHTML = pugrenderAnnotations({
+                                        landmarks: annotations.landmarkAnnotations||null,
+                                        labels: annotations.labelAnnotations||null
+                                    });
+                                    let content = tempDiv.firstChild;
+                                    tempDiv.remove();
+                                    return content;
+                                })()
+                            );
                         }
                     })
                 }
