@@ -1,9 +1,8 @@
 .gvision_results
     .landmark
-        if (landmarks)
+        if (landmark)
             i(class="fa fa-map-marker fa-fw") &nbsp;
-            each landmark in landmarks
-                landmark(onclick=`locationSearch('${landmark.description}')`)= landmark.description
+            landmark(onclick=`locationSearch('${landmark.description}')`)= landmark.description
     .labels
         if (labels)
             i(class="fa fa-tags fa-fw") &nbsp;

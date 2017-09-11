@@ -200,7 +200,7 @@ function processResults(results, callback) {
                                 (() => {
                                     let tempDiv = document.createElement('div');
                                     tempDiv.innerHTML = pugrenderAnnotations({
-                                        landmarks: annotations.landmarkAnnotations||null,
+                                        landmark: annotations.landmarkAnnotations[0]||null,
                                         labels: annotations.labelAnnotations||null
                                     });
                                     let content = tempDiv.firstChild;

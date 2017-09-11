@@ -17,10 +17,12 @@ module.exports.annotate = function(image_url, callback) {
                     },
                     features: [
                         {
-                            type: "LABEL_DETECTION"
+                            type: "LABEL_DETECTION",
+                            maxResults: "10"
                         },
                         {
-                            type: "LANDMARK_DETECTION"
+                            type: "LANDMARK_DETECTION",
+                            maxResults: "1"
                         }
                     ]
                 }
