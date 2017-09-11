@@ -192,6 +192,13 @@ function processResults(results, callback) {
                     loadingOverlay(imgcontainer, false);
                     loadingOverlay(e.target.getElement(), false);
                     loading = false;
+
+                    $.ajax(`/annotate/${encodeURIComponent(photo.url)}`, {
+                        method: "POST",
+                        success: (annotations) => {
+                            console.log(annotations);
+                        }
+                    })
                 }
             });
         });

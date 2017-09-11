@@ -27,6 +27,6 @@ module.exports.annotate = function(image_url, callback) {
             ]
         })
     }, (error, response, body) => {
-        callback((JSON.parse(body)).responses);
+        callback((JSON.parse(body)).responses[0]);
     });
 }
