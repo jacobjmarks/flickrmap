@@ -29,6 +29,19 @@ module.exports.annotate = function(image_url, callback) {
             ]
         })
     }, (error, response, body) => {
-        callback((JSON.parse(body)).responses[0]);
+        let gvision = (JSON.parse(body)).responses[0];
+        
+        callback({
+            landmark: (gvision.landmarkAnnotations && 
+                       gvision.landmarkAnnotations[0].description)||null,
+            labels: (() => {
+                let labels = [];
+                let numLabels = gvision.labelAnnotations.length;
+                for (let i = 0; i < numLabels; i++) {
+                    labels.push(gvision.labelAnnotations[i].description);
+                }
+                return labels;
+            })()
+        });
     });
 }

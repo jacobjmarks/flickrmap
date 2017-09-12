@@ -200,8 +200,8 @@ function processResults(results, callback) {
                                 (() => {
                                     let tempDiv = document.createElement('div');
                                     tempDiv.innerHTML = pugrenderAnnotations({
-                                        landmark: annotations.landmarkAnnotations[0]||null,
-                                        labels: annotations.labelAnnotations||null
+                                        landmark: annotations.landmark,
+                                        labels: annotations.labels
                                     });
                                     let content = tempDiv.firstChild;
                                     tempDiv.remove();

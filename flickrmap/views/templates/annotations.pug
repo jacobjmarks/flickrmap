@@ -2,9 +2,9 @@
     .landmark
         if (landmark)
             i(class="fa fa-map-marker fa-fw") &nbsp;
-            landmark(onclick=`locationSearch('${landmark.description}')`)= landmark.description
+            landmark(onclick=`locationSearch('${landmark}')`)= landmark
     .labels
         if (labels)
             i(class="fa fa-tags fa-fw") &nbsp;
             each label in labels
-                label.button(onclick=`tagSearch('${label.description}')`)= label.description
+                label.button(onclick=`tagSearch('${label}')`)= label
