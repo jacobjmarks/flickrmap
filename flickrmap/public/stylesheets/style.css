@@ -167,17 +167,19 @@
         grid-row: 5;
         font-size: 1.25em;
     }
-        .gvision .gvision_results {
+        .gvision_results .landmark > landmark {
+            cursor: pointer;
         }
-            .gvision_results .labels {
+            .landmark > landmark:hover {
+                text-decoration: underline;
             }
-                .labels > label {
-                    display: inline-block;
-                    padding: 2px 5px;
-                    margin-right: 2px;
-                    margin-top: 2px;
-                    font-size: small;
-                }
+        .gvision_results .labels > label {
+                display: inline-block;
+                padding: 2px 5px;
+                margin-right: 2px;
+                margin-top: 2px;
+                font-size: small;
+        }
         
 /* BODY/SIDEBAR WRAPPER
 *************************************************************************/
