@@ -232,6 +232,10 @@
     font-size: 3em;
 }
 
+#header #buttons {
+    display: none;
+}
+
 #header #buttons button {
     width: 25%;
     height: 30px;

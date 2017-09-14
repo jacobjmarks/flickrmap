@@ -1,4 +1,5 @@
 window.onload = function() {
+    // Setup and display the Leafet map...
     map = L.map('map', {
         center: [0, 30],
         zoom: 2.5,
@@ -6,7 +7,10 @@ window.onload = function() {
     });
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        attribution:
+            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>' +
+            'contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">' +
+            'CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
         id: 'mapbox.streets',
         accessToken: 'pk.eyJ1IjoibmVjcm9ieXRlIiwiYSI6ImNpb2wycXRybzAwM2x1eG0xNnQ3dXVvZzcifQ.pGatEbiyoc6HmJoQHdYGwg'
@@ -14,10 +18,6 @@ window.onload = function() {
 
     markers = L.featureGroup().addTo(map);
     map.zoomControl.setPosition('topright');
-    
-    // map.locate({
-    //     setView: true
-    // });
 
     // Assign relevant DOM elements.
     DOM = {
@@ -33,11 +33,20 @@ window.onload = function() {
     };
 }
 
+/**
+ * Function to search for images using the Flickr API given a query string.
+ * @param {string} text - The query to search for.
+ * @param {int} page - The page of results to request.
+ * @param {bool} keyoverride - If false, the user must press enter in
+ *                             the searchbox to initiate the search.
+ */
 function search(text, page, keyoverride) {
     if (!keyoverride && event.keyCode != 13) {
         return;
     }
+
     loadingOverlay(DOM.sidebar, true);
+
     $.ajax(req = {
         url: "/imagesearch",
         method: "POST",
@@ -45,7 +54,7 @@ function search(text, page, keyoverride) {
             text: text,
             sort: DOM.sort.options[DOM.sort.selectedIndex].value,
             page: 1,
-            per_page: getPerPage()
+            per_page: DOM.perpage.value
         },
         success: (rsp) => {
             lastReq = req.data;
@@ -56,16 +65,27 @@ function search(text, page, keyoverride) {
     });
 }
 
+/**
+ * Function to search for images using the given tag.
+ * @param {string} tag - The tag to search for.
+ */
 function tagSearch(tag) {
     DOM.searchbox.value = tag;
     search(tag, 1, 1);
 }
 
+/**
+ * Function to search for images using the given location.
+ * @param {string} location - The location to search for.
+ */
 function locationSearch(location) {
     DOM.searchbox.value = location;
     search(location, 1, 1);
 }
 
+/**
+ * Function to load the next page of search results.
+ */
 function loadMore() {
     loadingOverlay(DOM.sidebar, true);
     $.ajax(req = {
@@ -75,7 +95,7 @@ function loadMore() {
             text: lastReq.text,
             sort: lastReq.sort,
             page: lastReq.page + 1,
-            per_page: getPerPage()
+            per_page: DOM.perpage.value
         },
         success: (rsp) => {
             lastReq = req.data;
@@ -86,14 +106,12 @@ function loadMore() {
     });
 }
 
+/**
+ * Function to handle the search results after an image search.
+ * @param {JSON Object} results - Object containing the relevent search results.
+ * @param {Function} callback - Function to execute after results have been processed.
+ */
 function processResults(results, callback) {
-    function clearImages() {
-        while(DOM.sideimages.lastChild) {
-            DOM.sideimages.removeChild(DOM.sideimages.lastChild);
-        }
-        markers.clearLayers();
-    }
-    
     let numImages = results.photos.length;
 
     if (numImages === 0) {
@@ -104,7 +122,7 @@ function processResults(results, callback) {
         return;
     }
 
-    if (results.page == 1) {
+    if (results.page === 1) {
         clearImages();
         DOM.btnSeeMore.style.visibility = "visible";
     }
@@ -231,18 +249,21 @@ function processResults(results, callback) {
     });
 }
 
-function btnSearch_OnClick() {
-    search(DOM.searchbox.value, 1, true);
+/**
+ * Function to clear all image search results.
+ */
+function clearImages() {
+    while(DOM.sideimages.lastChild) {
+        DOM.sideimages.removeChild(DOM.sideimages.lastChild);
+    }
+    markers.clearLayers();
 }
 
-function getPerPage() {
-    return DOM.perpage.value;
-    // OLD DYNAMIC METHOD
-    // const columns = 2;
-    // let rows = Math.floor(DOM.sideimages.clientHeight / 160);
-    // return columns * rows;
-}
-
+/**
+ * Function to add a loading overlay to a given element.
+ * @param {DOM element} element - The DOM element on which to add/remove the overlay.
+ * @param {bool} on - If true, display the overlay. Otherwise remove if present.
+ */
 function loadingOverlay(element, on) {
     if (on) {
         let overlay = document.createElement('div');
@@ -253,6 +274,10 @@ function loadingOverlay(element, on) {
         overlay.appendChild(img);
         element.appendChild(overlay);
     } else {
-        element.removeChild(element.lastChild);
+        let overlay = element.getElementsByClassName("overlay") &&
+                      element.getElementsByClassName("overlay")[0];
+        if (overlay) {
+            element.removeChild(overlay);
+        }
     }
 }

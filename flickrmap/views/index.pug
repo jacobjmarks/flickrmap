@@ -27,7 +27,7 @@ html
                         button.button(id="btnPanda" onclick="panda()") Panda
                 #form
                     input(id="searchbox" placeholder="Search..." onkeyup="search(this.value, 1)")
-                    button.button(id="btnSearch" onclick="btnSearch_OnClick()") Search
+                    button.button(id="btnSearch" onclick="search(searchbox.value, 1, true)") Search
                     #options
                         #sortbydiv
                             p Sort By:
