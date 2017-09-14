@@ -24,7 +24,7 @@ window.onload = function() {
         sidebar: document.getElementById("sidebar"),
         sideimages: document.getElementById("sideimages"),
         noresults: document.getElementById("noresults"),
-        btnSeeMore: document.getElementById("btnSeeMore"),
+        btnLoadMore: document.getElementById("btnLoadMore"),
         searchbox: document.getElementById("searchbox"),
         sort: document.getElementById("sort"),
         perpage: document.getElementById("perpage"),
@@ -47,6 +47,8 @@ function search(text, page, keyoverride) {
 
     loadingOverlay(DOM.sidebar, true);
 
+    // POST the server with the relevent request data to search for images.
+    // (Flickr API - flickr.photos.search)
     $.ajax(req = {
         url: "/imagesearch",
         method: "POST",
@@ -56,9 +58,9 @@ function search(text, page, keyoverride) {
             page: 1,
             per_page: DOM.perpage.value
         },
-        success: (rsp) => {
+        success: (results) => {
             lastReq = req.data;
-            processResults(rsp, () => {
+            processResults(results, () => {
                 loadingOverlay(DOM.sidebar, false);
             });
         }
@@ -88,6 +90,10 @@ function locationSearch(location) {
  */
 function loadMore() {
     loadingOverlay(DOM.sidebar, true);
+
+    // POST the server with the previous request data,
+    // though incrementing the desired page by one.
+    // (Flickr API - flickr.photos.search)
     $.ajax(req = {
         url: "/imagesearch",
         method: "POST",
@@ -97,9 +103,9 @@ function loadMore() {
             page: lastReq.page + 1,
             per_page: DOM.perpage.value
         },
-        success: (rsp) => {
+        success: (results) => {
             lastReq = req.data;
-            processResults(rsp, () => {
+            processResults(results, () => {
                 loadingOverlay(DOM.sidebar, false);
             });
         }
@@ -114,68 +120,91 @@ function loadMore() {
 function processResults(results, callback) {
     let numImages = results.photos.length;
 
+    // If there are no results, clear any current results and display 'no results'.
     if (numImages === 0) {
         clearImages();
-        DOM.btnSeeMore.style.visibility = "hidden";
+        DOM.btnLoadMore.style.visibility = "hidden";
         DOM.noresults.style.visibility = "visible";
         callback();
         return;
+    } else {
+        DOM.noresults.style.visibility = "hidden";
+        DOM.btnLoadMore.style.visibility = "visible";
     }
 
+    // If the results are the first page of a search, clear any current results.
     if (results.page === 1) {
         clearImages();
-        DOM.btnSeeMore.style.visibility = "visible";
     }
 
+    // If the results page is equal to the total number of pages,
+    // disable the 'load more' button.
     if (results.page === results.pages) {
-        DOM.btnSeeMore.style.visibility = "hidden";
+        DOM.btnLoadMore.style.visibility = "hidden";
     }
-    
-    DOM.noresults.style.visibility = "hidden";
 
+    // Notify the Flickr API call is complete.
     callback();
 
     let photoInfoRetrieved = [];
     
+    // For each photo...
     for (i = 0; i < numImages; i++) {
         let photo = results.photos[i];
-        let imgcontainer = document.createElement('div');
-        imgcontainer.className = "sideimagediv";
-        let img = document.createElement("img");
 
+        // Create an img element for the sidebar.
+        let img = document.createElement("img");
         img.src = photo.url_q;
         img.onload = (e) => {
+            // Display the image when it has finished loading.
             e.target.parentElement.style.display = "inline-block";
         }
-        
-        imgcontainer.onclick = () => {
-            marker.fire("click");
-        }
 
+        let imgcontainer = document.createElement('div');
+        imgcontainer.className = "sideimagediv";
         imgcontainer.appendChild(img);
+
+        // Add the image to the sidebar.
         DOM.sideimages.appendChild(imgcontainer);
 
+        // Create the map marker icon.
         let icon = L.divIcon({
             iconSize: [50, 50],
             html: `<img src=${photo.url_q}>`
         });
 
+        // Add a new marker to the map.
         let marker = L.marker([photo.lat, photo.lon], {icon: icon}).addTo(markers);
 
+        // Synchronise onclick actions for map marker and sidebar image.
+        imgcontainer.onclick = () => {
+            marker.fire("click");
+        }
+
         var loading = false;
+
+        // Load and display extended photo information when
+        // the map marker is clicked (or the sidebar image).
         marker.on("click", (e) => {
+            // If currently loading other photo info, or this
+            // photo info has already been retrieved, return.
             if (loading === true || photoInfoRetrieved.indexOf(photo.photo_id) !== -1) {
                 return;
             }
+
+            // Add relevent loading overlays.
             loadingOverlay(imgcontainer, true);
             loadingOverlay(e.target.getElement(), true);
             loading = true;
             
+            // POST the server with the photo id for extended information.
+            // (Flickr API - flickr.photos.getInfo)
             $.ajax(`/photo/${photo.photo_id}`, {
                 method: "POST",
                 success: (photoInfo) => {
                     photoInfoRetrieved.push(photo.photo_id);
 
+                    // Create a new popup.
                     let popup = L.popup({
                         autoPanPaddingTopLeft: [370, 10],
                         autoPanPaddingBottomRight: [10, 10],
@@ -183,6 +212,8 @@ function processResults(results, callback) {
                         maxWidth: 500
                     });
 
+                    // Define the popup content by rendering a pug template
+                    // and returning it as a HTML element.
                     let popupContent = (() => {
                         let tempDiv = document.createElement('div');
                         tempDiv.innerHTML = pugrenderPopup({
@@ -204,16 +235,21 @@ function processResults(results, callback) {
                         return content;
                     })();
 
+                    // Assign the popup content and open the popup.
                     popup.setContent(popupContent);
                     marker.bindPopup(popup).openPopup();
 
+                    // Remnove relevent loading overlays.
                     loadingOverlay(imgcontainer, false);
                     loadingOverlay(e.target.getElement(), false);
                     loading = false;
 
+                    // POST the server with the photo url to have it annotated.
+                    // (Google Vision API)
                     $.ajax(`/annotate/${encodeURIComponent(photo.url)}`, {
                         method: "POST",
                         success: (annotations) => {
+                            // Display the annotations on the popup via a pug template.
                             popupContent.getElementsByClassName("gvision")[0].appendChild(
                                 (() => {
                                     let tempDiv = document.createElement('div');
@@ -243,6 +279,7 @@ function processResults(results, callback) {
         };
     }
 
+    // Zoom/Scale the map to fit all map markers in view.
     map.fitBounds(markers.getBounds(), {
         paddingTopLeft: [350 + 30, 30],
         paddingBottomRight: [30, 30]

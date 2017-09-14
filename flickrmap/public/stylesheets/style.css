@@ -330,7 +330,7 @@
     transform: translate(-50%, -50%);
 }
 
-#btnSeeMore {
+#btnLoadMore {
     visibility: hidden;
     font-size: 1.5em;
     position: absolute;
@@ -362,6 +362,8 @@
         transform: translate(-50%, -50%);
     }
 
+/* OTHER
+*************************************************************************/
 ::-webkit-scrollbar {
     width: 10px;
 }
