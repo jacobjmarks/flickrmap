@@ -1,4 +1,4 @@
-FROM node:6.11.2-slim
+FROM node:boron-slim
 COPY /flickrmap /flickrmap
 WORKDIR /flickrmap
 EXPOSE 80
