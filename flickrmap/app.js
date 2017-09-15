@@ -43,6 +43,7 @@ router.post("/photo/:photo_id", (req, res) => {
 router.post("/annotate/:image_url", (req, res) => {
     console.log(`POST /annotate/${req.params.image_url}`);
     gvision.annotate(req.params.image_url, (annotations) => {
+        console.log(` -> SERVING ANNOTATIONS`);
         res.json(annotations);
         res.end();
     });
