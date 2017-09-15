@@ -1,5 +1,5 @@
 FROM node:boron-slim
-COPY /flickrmap /flickrmap
-WORKDIR /flickrmap
+COPY /flickrmap .
 EXPOSE 80
-CMD npm install && npm start
+RUN npm install
+CMD npm start
