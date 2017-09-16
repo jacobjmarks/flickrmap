@@ -1,5 +1,10 @@
 const request = require('request');
 
+/**
+ * Function to search for images using Flickr API.
+ * @param {JSON Object} params - Search parameters.
+ * @param {Function} callback - Callback to handle search results.
+ */
 module.exports.search = function(params, callback) {
     request(formApiUrl({
         method: "flickr.photos.search",
@@ -12,6 +17,8 @@ module.exports.search = function(params, callback) {
     }), (error, response, body) => {
         let results = JSON.parse(body).photos;
 
+        // Form the data to be given to the client, using
+        // only what we need from the API response.
         callback({
             page: results.page,
             pages: results.pages,
@@ -35,6 +42,11 @@ module.exports.search = function(params, callback) {
     });
 }
 
+/**
+ * Function to retrieve extended photo information using Flickr API.
+ * @param {string} photo_id - The ID of the photo to fetch information.
+ * @param {Function} callback - Callback to handle photo info.
+ */
 module.exports.getPhotoInfo = function(photo_id, callback) {
     request(formApiUrl({
         method: "flickr.photos.getInfo",
@@ -44,6 +56,8 @@ module.exports.getPhotoInfo = function(photo_id, callback) {
         let info = JSON.parse(body).photo;
         let owner = info.owner;
 
+        // Form the data to be given to the client, using
+        // only what we need from the API response.
         callback({
             photohref: `https://www.flickr.com/photos/${owner.nsid}/${photo_id}`,
             title: info.title._content,
@@ -82,6 +96,10 @@ module.exports.getPhotoInfo = function(photo_id, callback) {
     });
 }
 
+/**
+ * Function form a custom Flickr REST API url.
+ * @param {JSON Object} customParams - Custom parameters to add to the url
+ */
 function formApiUrl(customParams) {
     let url = "https://api.flickr.com/services/rest/?";
 

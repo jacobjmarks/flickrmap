@@ -1,5 +1,10 @@
 const request = require("request");
 
+/**
+ * Function to fetch annotations on a given image using Google Cloud Vision API.
+ * @param {string} image_url - The url of the image to annotate.
+ * @param {Function} callback - Callback to handle resulting annotations.
+ */
 module.exports.annotate = function(image_url, callback) {
     request({
         method: "POST",
@@ -31,6 +36,8 @@ module.exports.annotate = function(image_url, callback) {
     }, (error, response, body) => {
         let gvision = (JSON.parse(body)).responses[0];
         
+        // Form the data to be given to the client, using
+        // only what we need from the API response.
         callback({
             landmark: (gvision.landmarkAnnotations && 
                        gvision.landmarkAnnotations[0].description)||null,
