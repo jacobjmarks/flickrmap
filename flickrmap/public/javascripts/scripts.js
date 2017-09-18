@@ -74,6 +74,7 @@ function search(text, page, keyoverride) {
 
 /**
  * Function to search for images using the given tag.
+ * (Somewhat redundant, see Report - Extensions)
  * @param {string} tag - The tag to search for.
  */
 function tagSearch(tag) {
@@ -83,6 +84,7 @@ function tagSearch(tag) {
 
 /**
  * Function to search for images using the given location.
+ * (Somewhat redundant, see Report - Extensions)
  * @param {string} location - The location to search for.
  */
 function locationSearch(location) {
@@ -146,7 +148,7 @@ function processResults(results) {
     }
 
     // If the results page is equal to the total number of pages,
-    // disable the 'load more' button.
+    // disable the 'load more' button (no more results).
     if (results.page === results.pages) {
         DOM.btnLoadMore.style.visibility = "hidden";
     }
