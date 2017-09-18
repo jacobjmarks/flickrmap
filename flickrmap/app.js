@@ -24,28 +24,43 @@ router.get("/", (req, res) => {
 router.post("/imagesearch", (req, res) => {
     let params = req.body;
     console.log("POST /", params);
-    flickr.search(params, (results) => {
-        console.log(` -> SERVING ${results.photos.length} PHOTOS`);
-        res.json(results);
-        res.end();
+    flickr.search(params, (err, results) => {
+        if (!err) {
+            console.log(` -> SERVING ${results.photos.length} PHOTOS`);
+            res.json(results);
+            res.end();
+        } else {
+            console.error(err.stack);
+            res.status(500).end();
+        }
     });
 });
 
 router.post("/photo/:photo_id", (req, res) => {
     console.log(`POST /photo/${req.params.photo_id}`);
-    flickr.getPhotoInfo(req.params.photo_id, (photoInfo) => {
-        console.log(` -> SERVING PHOTO INFO`);
-        res.json(photoInfo);
-        res.end();
+    flickr.getPhotoInfo(req.params.photo_id, (err, photoInfo) => {
+        if (!err) {
+            console.log(` -> SERVING PHOTO INFO`);
+            res.json(photoInfo);
+            res.end();
+        } else {
+            console.error(err.stack);
+            res.status(500).end();
+        }
     });
 })
 
 router.post("/annotate/:image_url", (req, res) => {
     console.log(`POST /annotate/${req.params.image_url}`);
-    gvision.annotate(req.params.image_url, (annotations) => {
-        console.log(` -> SERVING ANNOTATIONS`);
-        res.json(annotations);
-        res.end();
+    gvision.annotate(req.params.image_url, (err, annotations) => {
+        if (!err) {
+            console.log(` -> SERVING ANNOTATIONS`);
+            res.json(annotations);
+            res.end();
+        } else {
+            console.error(err.stack);
+            res.status(500).end();
+        }
     });
 });
 

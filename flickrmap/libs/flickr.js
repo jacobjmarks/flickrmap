@@ -15,30 +15,38 @@ module.exports.search = function(params, callback) {
         has_geo: true,
         extras: "geo"
     }), (error, response, body) => {
-        let results = JSON.parse(body).photos;
+        if (error || response.statusCode != 200) {
+            return callback(new Error("API response error."));
+        }
 
-        // Form the data to be given to the client, using
-        // only what we need from the API response.
-        callback({
-            page: results.page,
-            pages: results.pages,
-            total: results.total,
-            photos: (() => {
-                let photos = [];
-                let numPhotos = results.photo.length;
-                for (i = 0; i < numPhotos; i++) {
-                    let photo = results.photo[i];
-                    photos.push({
-                        photo_id: photo.id,
-                        url: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`,
-                        url_q: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_q.jpg`,
-                        lat: photo.latitude,
-                        lon: photo.longitude
-                    });
-                }
-                return photos;
-            })()
-        });
+        try {
+            let results = JSON.parse(body).photos;
+
+            // Form the data to be given to the client, using
+            // only what we need from the API response.
+            callback(null, {
+                page: results.page,
+                pages: results.pages,
+                total: results.total,
+                photos: (() => {
+                    let photos = [];
+                    let numPhotos = results.photo.length;
+                    for (i = 0; i < numPhotos; i++) {
+                        let photo = results.photo[i];
+                        photos.push({
+                            photo_id: photo.id,
+                            url: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`,
+                            url_q: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_q.jpg`,
+                            lat: photo.latitude,
+                            lon: photo.longitude
+                        });
+                    }
+                    return photos;
+                })()
+            });
+        } catch (err) {
+            return callback(new Error("API format error."));
+        }
     });
 }
 
@@ -53,46 +61,54 @@ module.exports.getPhotoInfo = function(photo_id, callback) {
         photo_id: photo_id,
         extras: "count_faves"
     }), (error, response, body) => {
-        let info = JSON.parse(body).photo;
-        let owner = info.owner;
+        if (error || response.statusCode != 200) {
+            return callback(new Error("API response error."));
+        }
 
-        // Form the data to be given to the client, using
-        // only what we need from the API response.
-        callback({
-            photohref: `https://www.flickr.com/photos/${owner.nsid}/${photo_id}`,
-            title: info.title._content,
-            description: info.description._content,
-            views: info.views,
-            comments: info.comments._content,
-            faves: info.count_faves,
-            tags: (()=> {
-                let tags = [];
-                let tagArray = info.tags.tag;
-                let numTags = tagArray.length;
-                for(i = 0; i < numTags; i++) {
-                    tags.push(tagArray[i].raw);
+        try {
+            let info = JSON.parse(body).photo;
+            let owner = info.owner;
+
+            // Form the data to be given to the client, using
+            // only what we need from the API response.
+            callback(null, {
+                photohref: `https://www.flickr.com/photos/${owner.nsid}/${photo_id}`,
+                title: info.title._content,
+                description: info.description._content,
+                views: info.views,
+                comments: info.comments._content,
+                faves: info.count_faves,
+                tags: (()=> {
+                    let tags = [];
+                    let tagArray = info.tags.tag;
+                    let numTags = tagArray.length;
+                    for(i = 0; i < numTags; i++) {
+                        tags.push(tagArray[i].raw);
+                    }
+                    return tags;
+                })(),
+                location: (() => {
+                    let locations = [];
+                    let loc = info.location;
+                    if (loc.locality) { locations.push(loc.locality); }
+                    if (loc.county)   { locations.push(loc.county);   }
+                    if (loc.region)   { locations.push(loc.region);   }
+                    if (loc.country)  { locations.push(loc.country);  }
+                    return locations;
+                })(),
+                owner: {
+                    name: owner.realname || owner.username,
+                    profilehref: `http://www.flickr.com/people/${owner.nsid}`,
+                    buddyicon:
+                        (owner.iconserver != 0) ?
+                            `http://farm${owner.iconfarm}.staticflickr.com/${owner.iconserver}/buddyicons/${owner.nsid}.jpg`
+                            :
+                            "https://www.flickr.com/images/buddyicon.gif"
                 }
-                return tags;
-            })(),
-            location: (() => {
-                let locations = [];
-                let loc = info.location;
-                if (loc.locality) { locations.push(loc.locality); }
-                if (loc.county)   { locations.push(loc.county);   }
-                if (loc.region)   { locations.push(loc.region);   }
-                if (loc.country)  { locations.push(loc.country);  }
-                return locations;
-            })(),
-            owner: {
-                name: owner.realname || owner.username,
-                profilehref: `http://www.flickr.com/people/${owner.nsid}`,
-                buddyicon:
-                    (owner.iconserver != 0) ?
-                        `http://farm${owner.iconfarm}.staticflickr.com/${owner.iconserver}/buddyicons/${owner.nsid}.jpg`
-                        :
-                        "https://www.flickr.com/images/buddyicon.gif"
-            }
-        });
+            });
+        } catch (err) {
+            return callback(new Error("API format error."));
+        }
     });
 }
 

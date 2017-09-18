@@ -58,12 +58,17 @@ function search(text, page, keyoverride) {
             page: 1,
             per_page: DOM.perpage.value
         },
+        error: () => {
+            notifyError();
+        },
         success: (results) => {
             lastReq = req.data;
-            processResults(results, () => {
-                loadingOverlay(DOM.sidebar, false);
-            });
+            processResults(results);
+        },
+        complete: () => {
+            loadingOverlay(DOM.sidebar, false);
         }
+
     });
 }
 
@@ -103,11 +108,15 @@ function loadMore() {
             page: lastReq.page + 1,
             per_page: DOM.perpage.value
         },
+        error: () => {
+            notifyError();
+        },
         success: (results) => {
             lastReq = req.data;
-            processResults(results, () => {
-                loadingOverlay(DOM.sidebar, false);
-            });
+            processResults(results);
+        },
+        complete: () => {
+            loadingOverlay(DOM.sidebar, false);
         }
     });
 }
@@ -115,9 +124,8 @@ function loadMore() {
 /**
  * Function to handle the search results after an image search.
  * @param {JSON Object} results - Object containing the relevent search results.
- * @param {Function} callback - Function to execute after results have been processed.
  */
-function processResults(results, callback) {
+function processResults(results) {
     let numImages = results.photos.length;
 
     // If there are no results, clear any current results and display 'no results'.
@@ -142,9 +150,6 @@ function processResults(results, callback) {
     if (results.page === results.pages) {
         DOM.btnLoadMore.style.visibility = "hidden";
     }
-
-    // Notify the Flickr API call is complete.
-    callback();
 
     let photoInfoRetrieved = [];
     
@@ -201,6 +206,12 @@ function processResults(results, callback) {
             // (Flickr API - flickr.photos.getInfo)
             $.ajax(`/photo/${photo.photo_id}`, {
                 method: "POST",
+                error: () => {
+                    loadingOverlay(imgcontainer, false);
+                    loadingOverlay(e.target.getElement(), false);
+                    loading = false;
+                    notifyError();
+                },
                 success: (photoInfo) => {
                     photoInfoRetrieved.push(photo.photo_id);
 
@@ -248,6 +259,15 @@ function processResults(results, callback) {
                     // (Google Vision API)
                     $.ajax(`/annotate/${encodeURIComponent(photo.url)}`, {
                         method: "POST",
+                        error: () => {
+                            popupContent.getElementsByClassName("gvision")[0].appendChild(
+                                (() => {
+                                    let errmsg = document.createElement('div');
+                                    errmsg.innerHTML = "Error.";
+                                    return errmsg;
+                                })()
+                            );
+                        },
                         success: (annotations) => {
                             // Display the annotations on the popup via a pug template.
                             popupContent.getElementsByClassName("gvision")[0].appendChild(
@@ -262,7 +282,8 @@ function processResults(results, callback) {
                                     return content;
                                 })()
                             );
-
+                        },
+                        complete: () => {                            
                             $(".fa-cog").hide();
                         }
                     })
@@ -317,4 +338,11 @@ function loadingOverlay(element, on) {
             element.removeChild(overlay);
         }
     }
+}
+
+/**
+ * Function to notify user of an error.
+ */
+function notifyError() {
+    alert("An error occurred.");
 }
