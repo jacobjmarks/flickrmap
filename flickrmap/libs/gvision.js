@@ -10,7 +10,7 @@ module.exports.annotate = function(image_url, callback) {
         method: "POST",
         url: "https://vision.googleapis.com/v1/images:annotate",
         qs: {
-            key: "***REMOVED***"
+            key: process.env.GVISION_API_KEY
         },
         body: JSON.stringify({
             requests: [

@@ -120,7 +120,7 @@ function formApiUrl(customParams) {
     let url = "https://api.flickr.com/services/rest/?";
 
     const globalParams = {
-        api_key: "***REMOVED***",
+        api_key: process.env.FLICKR_API_KEY,
         format: "json",
         nojsoncallback: true
     };
